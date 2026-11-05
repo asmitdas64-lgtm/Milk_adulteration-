@@ -1,0 +1,4 @@
+[2026-11-05 15:20:10] [INFO] [run_20261105_152010]: Starting Feature Selection and Ranking Pipeline...
+[2026-11-05 15:20:21] [INFO] [run_20261105_152010]: Feature ranking completed. Top feature: ph
+[2026-11-05 15:20:21] [INFO] [run_20261105_152010]: RFECV selected 7 features: ['ph', 'temprature', 'taste', 'odor', 'fat', 'turbidity', 'colour']
+[2026-11-05 15:20:21] [INFO] [run_20261105_152010]: No pairwise collinearity exceeding threshold found.

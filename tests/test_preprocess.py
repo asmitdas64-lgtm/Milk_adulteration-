@@ -36,3 +36,4 @@ def test_build_preprocessor_runs_and_scales(mock_cfg):
     # Transformed data should have mean approx 0 and std approx 1
     assert np.mean(transformed, axis=0) == pytest.approx([0.0, 0.0, 0.0], abs=1e-5)
     assert np.std(transformed, axis=0) == pytest.approx([1.0, 1.0, 1.0], abs=1e-5)
+

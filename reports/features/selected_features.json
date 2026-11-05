@@ -1,0 +1,21 @@
+{
+  "all_features": [
+    "ph",
+    "temprature",
+    "taste",
+    "odor",
+    "fat",
+    "turbidity",
+    "colour"
+  ],
+  "selected_features": [
+    "ph",
+    "temprature",
+    "taste",
+    "odor",
+    "fat",
+    "turbidity",
+    "colour"
+  ],
+  "correlated_pairs_above_threshold": []
+}

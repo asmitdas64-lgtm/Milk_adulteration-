@@ -31,3 +31,4 @@ def test_iqr_clipper_raises_when_not_fitted():
     clipper = IQRClipper(factor=1.5)
     with pytest.raises(NotFittedError):
         clipper.transform(np.array([[10.0]]))
+

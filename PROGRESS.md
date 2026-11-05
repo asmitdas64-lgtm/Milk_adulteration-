@@ -51,3 +51,14 @@
   - Confirmed D-07: minority class is 24.17% (pure milk samples), so standard stratified 5-fold cross-validation is robust.
 - Tests: 12 passed in 14.25s (`pytest -v`).
 - Next step: Phase 3 — Splitting & Leak-free Preprocessing Pipeline.
+
+### 2026-11-05 — Session 4 — Phase 3 Completed
+- Done:
+  - Wrote Phase 3 tests first (`tests/test_split.py`, `tests/test_transformers.py`, `tests/test_preprocess.py`, `tests/test_leakage.py`).
+  - Implemented `src/foodadult/data/split.py` performing stratified 80/20 train/test split (seed=42).
+  - Implemented custom `IQRClipper(factor=1.5)` in `src/foodadult/features/transformers.py` for winsorizing extreme outliers.
+  - Implemented `build_preprocessor()` in `src/foodadult/features/preprocess.py` chaining Median Imputer -> IQRClipper -> StandardScaler in a Scikit-Learn `ColumnTransformer`.
+  - Mathematically verified zero data leakage via `tests/test_leakage.py`.
+  - Executed CLI `python -m foodadult.cli split`. Artifacts generated in `data/processed/`: `train.csv` (847 samples), `test.csv` (212 samples), and `split.json`. Train/test class proportions match within 0.14%.
+- Tests: 17 passed in 14.93s (`pytest -v`).
+- Next step: Phase 4 — Feature Engineering & Selection (Objective 4 of report).

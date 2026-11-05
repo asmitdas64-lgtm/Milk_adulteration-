@@ -46,3 +46,4 @@ def build_preprocessor(config: Dict[str, Any]) -> ColumnTransformer:
         remainder="drop",
     )
     return preprocessor
+

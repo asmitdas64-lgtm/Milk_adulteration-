@@ -58,13 +58,13 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P3.5 Stratification test: class ratio train ≈ test (±1 %) (actual: 75.80% vs 75.94%, diff=0.14%)
 
 ## Phase 4 — Feature Engineering & Selection
-- [ ] P4.0 🔴 Tests first: test_selection.py
-- [ ] P4.1 Pearson correlation report (|r| ≥ 0.90 pairs)
-- [ ] P4.2 RF impurity importance
-- [ ] P4.3 Permutation importance
-- [ ] P4.4 RFECV
-- [ ] P4.5 `feature_ranking.csv` + `selected_features.json`
-- [ ] P4.6 All-features vs subset CV comparison; D-09 applied; config updated
+- [x] P4.0 🔴 Tests first: test_selection.py
+- [x] P4.1 Pearson correlation report (|r| ≥ 0.90 pairs) (none exceeded threshold)
+- [x] P4.2 RF impurity importance (top: pH=0.392, temp=0.180, fat=0.144)
+- [x] P4.3 Permutation importance (scoring: F1)
+- [x] P4.4 RFECV (5-fold stratified CV, selects all 7 features)
+- [x] P4.5 `feature_ranking.csv` + `selected_features.json` + `feat_importance.png` saved
+- [x] P4.6 All-features vs subset CV comparison; D-09 applied (all 7 features retained)
 
 ## Phase 5 — Baseline Models
 - [ ] P5.0 🔴 Tests first: test_registry.py, test_train.py (beats dummy on easy fixture)

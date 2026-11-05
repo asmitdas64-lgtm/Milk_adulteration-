@@ -56,3 +56,4 @@ def perform_stratified_split(config: Dict[str, Any]) -> Tuple[pd.DataFrame, pd.D
         json.dump(split_info, f, indent=2)
 
     return train_df, test_df, split_info
+

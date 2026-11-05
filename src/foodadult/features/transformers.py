@@ -36,3 +36,4 @@ class IQRClipper(BaseEstimator, TransformerMixin):
 
         X_arr = np.asarray(X, dtype=float)
         return np.clip(X_arr, self.lower_, self.upper_)
+

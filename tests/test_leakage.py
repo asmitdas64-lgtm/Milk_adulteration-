@@ -51,3 +51,4 @@ def test_no_data_leakage_between_train_and_test():
     # Now transform test: verify test extreme values do not change scaler.mean_
     preprocessor.transform(X_test)
     assert np.allclose(scaler.mean_, X_train.mean().values)
+

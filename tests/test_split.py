@@ -49,3 +49,4 @@ def test_stratified_split_proportions_and_sizes(tmp_path, dummy_df):
     assert (out_dir / "train.csv").is_file()
     assert (out_dir / "test.csv").is_file()
     assert (out_dir / "split.json").is_file()
+

@@ -10,6 +10,7 @@ from foodadult.data.load import load_raw, standardize_columns, make_binary_label
 from foodadult.data.split import perform_stratified_split
 from foodadult.data.validate import validate_dataframe
 from foodadult.eda import run_eda
+from foodadult.features.selection import run_feature_selection_pipeline
 from foodadult.logging_utils import create_run_directory, setup_logger
 
 
@@ -147,6 +148,30 @@ def execute_split(config_path: str):
     print(f"- Saved to:  {cfg['paths']['processed_dir']}/")
 
 
+def execute_select_features(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting Feature Selection and Ranking Pipeline...")
+    result = run_feature_selection_pipeline(cfg)
+    ranking_df = result["ranking_df"]
+    selected = result["selected_features"]
+    corr_pairs = result["correlated_pairs"]
+
+    logger.info(f"Feature ranking completed. Top feature: {ranking_df.iloc[0]['feature']}")
+    logger.info(f"RFECV selected {len(selected)} features: {selected}")
+    if corr_pairs:
+        logger.info(f"Highly correlated feature pairs (|r| >= threshold): {corr_pairs}")
+    else:
+        logger.info("No pairwise collinearity exceeding threshold found.")
+
+    print(f"\n[SUCCESS] Feature Selection & Ranking complete!")
+    print(f"- Ranked Features Table:\n{ranking_df.to_string(index=False)}")
+    print(f"\n- RFECV Selected Features: {selected}")
+    print(f"- Artifacts saved to: {reports_dir}/features/ and {reports_dir}/figures/feat_importance.png")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -159,6 +184,8 @@ def main():
         execute_eda(args.config)
     elif args.command == "split":
         execute_split(args.config)
+    elif args.command == "select-features":
+        execute_select_features(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 
