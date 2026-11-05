@@ -43,8 +43,10 @@ Existing screening approaches create a stark divide:
 
 ## 2. Dataset Description & Exploratory Data Analysis (Phases 1 & 2)
 
-### 2.1 Dataset Provenance & Schema
-The project utilizes the verified **Milk Quality Dataset** (`milknew.csv`), comprising 1,059 lab-measured physical records with zero missing values. 
+### 2.1 Dataset Provenance, Citation & Acknowledgements
+The dataset utilized in this project is the **Milk Quality Dataset** (`milknew.csv`), originally gathered and published by researcher **Subham Agarwal** on Kaggle (`https://www.kaggle.com/datasets/cpluzshrijayan/milknew`). It comprises 1,059 physical laboratory samples collected from real-world dairy testing observations. We gratefully acknowledge Subham Agarwal and the open-source machine learning research community for making this benchmark dataset publicly available under open research terms.
+
+The raw dataset comprises 1,059 laboratory-measured records across seven continuous and categorical physicochemical attributes with zero missing values. 
 
 | Feature Name | Description | Data Type | Physical Unit / Encoding | Observed Range |
 |---|---|---|---|---|
@@ -267,3 +269,16 @@ This project successfully designed, implemented, and rigorously tested an automa
 **Future Work**:
 - Integration with embedded microcontroller hardware (ESP32 / Raspberry Pi) for edge computing in dairy hubs.
 - Extension to multi-class adulterant identification using spectral sensor fusion.
+
+---
+
+## 14. Acknowledgements & Credits
+We express our sincere gratitude to:
+- **Dr. S. Vaishnavi**, Assistant Professor, Department of Computer Science & Engineering, Manipal Institute of Technology (MIT) Bengaluru, for her invaluable technical mentorship, constructive reviews, and guidance throughout the conceptualization, execution, and evaluation of this minor project.
+- **Subham Agarwal**, for originally curating and releasing the Milk Quality Benchmark Dataset (`milknew.csv`) to the global open data and machine learning research community.
+- **Department of Computer Science & Engineering, MIT Bengaluru**, for providing computing infrastructure, research facilities, and academic encouragement.
+- **Project Team**:
+  - **Asmit Das** (Reg No: 235891248)
+  - **Suprathik Narendra** (Reg No: 235891216)
+  - **Nadia Cecil** (Reg No: 235891048)
+

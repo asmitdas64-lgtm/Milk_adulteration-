@@ -351,6 +351,47 @@ def execute_report(config_path: str):
     print(f"Generated directly from test_metrics.json, tuned_cv.json, and final_importance.csv.")
 
 
+def execute_all(config_path: str):
+    """Execute complete Food Adulteration ML pipeline end-to-end."""
+    print("\n" + "=" * 80)
+    print(">>> EXECUTING COMPLETE FOOD ADULTERATION ML PIPELINE (END-TO-END)")
+    print("=" * 80)
+
+    print("\n>>> Step 1/10: Data Ingestion & Validation...")
+    run_validate(config_path)
+
+    print("\n>>> Step 2/10: Exploratory Data Analysis & Data Card...")
+    execute_eda(config_path)
+
+    print("\n>>> Step 3/10: Stratified Partitioning (80/20)...")
+    execute_split(config_path)
+
+    print("\n>>> Step 4/10: Feature Selection & Ranking...")
+    execute_select_features(config_path)
+
+    print("\n>>> Step 5/10: Model Training & Hyperparameter Tuning...")
+    execute_train_or_tune(config_path, models=None, tune=True)
+
+    print("\n>>> Step 6/10: Final Evaluation on Held-Out Test Set (One-Shot)...")
+    execute_evaluate(config_path)
+
+    print("\n>>> Step 7/10: Interpretability & Feature Hierarchy Analysis...")
+    execute_interpret(config_path)
+
+    print("\n>>> Step 8/10: Robustness & Ablation Studies...")
+    execute_ablate(config_path)
+
+    print("\n>>> Step 9/10: Dynamic Results Report Compilation...")
+    execute_report(config_path)
+
+    print("\n>>> Step 10/10: Batch Prediction Demo on Example Samples...")
+    execute_predict("models/best_model.joblib", "docs/example_input.csv", "reports/example_predictions.csv")
+
+    print("\n" + "=" * 80)
+    print("[SUCCESS] ALL 10 PIPELINE STAGES COMPLETED SUCCESSFULLY!")
+    print("=" * 80 + "\n")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -377,6 +418,8 @@ def main():
         execute_predict(args.model, args.input, args.output)
     elif args.command == "report":
         execute_report(args.config)
+    elif args.command == "all":
+        execute_all(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

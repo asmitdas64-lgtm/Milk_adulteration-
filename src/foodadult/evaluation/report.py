@@ -114,3 +114,4 @@ def generate_results_markdown(reports_dir: Union[str, Path]) -> Path:
         f.write("\n".join(lines))
 
     return out_file
+

@@ -59,3 +59,4 @@ def test_generate_results_markdown_matches_metrics(report_env):
     assert "SVM" in content
     assert "161" in content
     assert "TP" in content or "True Positives" in content
+

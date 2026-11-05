@@ -189,6 +189,11 @@ Future work will target microcontroller deployment (ESP32) for edge-native dairy
 
 ---
 
+## Acknowledgment
+The authors sincerely thank Dr. S. Vaishnavi, Assistant Professor, Department of Computer Science & Engineering, Manipal Institute of Technology (MIT) Bengaluru, for guidance and academic mentorship. The authors also gratefully acknowledge Subham Agarwal for curating and openly publishing the Milk Quality Benchmark Dataset (`milknew.csv`).
+
+---
+
 ## References
 1. Food Safety and Standards Authority of India (FSSAI), "National Milk Safety and Quality Survey Report," Tech. Rep., Ministry of Health and Family Welfare, Government of India, 2019.
 2. J. Poonia et al., "Detection of adulteration in milk: A review," *International Journal of Dairy Technology*, vol. 70, no. 1, pp. 23–42, 2017.
@@ -198,3 +203,4 @@ Future work will target microcontroller deployment (ESP32) for edge-native dairy
 6. A. Sengupta et al., "Rapid detection of milk adulteration using infrared spectroscopy and artificial neural networks," *Sensors and Actuators B: Chemical*, vol. 222, pp. 1012–1020, 2016.
 7. P. Kar et al., "Electrical impedance sensor for milk adulteration detection," *IEEE Sensors Journal*, vol. 18, no. 16, pp. 6802–6809, 2018.
 8. B. V. Kumar et al., "Comparative analysis of machine learning algorithms for milk quality evaluation," in *Proc. IEEE International Conference on Computing, Communication and Automation (ICCCA)*, 2021, pp. 412–417.
+
