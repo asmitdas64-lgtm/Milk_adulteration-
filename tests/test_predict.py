@@ -107,3 +107,4 @@ def test_validate_input_data_out_of_range(predict_fixture):
 
     with pytest.raises(ValueError, match="out of physically plausible range"):
         validate_input_data(bad_ph_df, features)
+

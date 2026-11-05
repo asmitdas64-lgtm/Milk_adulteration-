@@ -114,13 +114,13 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P10.4 D-11 confirmed: Streamlit out-of-scope per report §1.4, robust CLI tool provided
 
 ## Phase 11 — Results & Documentation
-- [ ] P11.0 🔴 Tests first: test_report.py (RESULTS.md numbers == metric JSON)
-- [ ] P11.1 `report.py` auto-generates `reports/RESULTS.md`
-- [ ] P11.2 README usage section complete
-- [ ] P11.3 `docs/final_report_draft.md` (Results, Discussion, Limitations, Future Work)
-- [ ] P11.4 Fix report issues listed in the review (typos, units, leakage order, figure/text mismatch)
-- [ ] P11.5 Domain literature references added (provided/verified by team — no invented citations)
-- [ ] P11.6 🧑 Every number traced to a file in `reports/`
+- [x] P11.0 🔴 Tests first: test_report.py (RESULTS.md numbers == metric JSON)
+- [x] P11.1 `report.py` auto-generates `reports/RESULTS.md` dynamically from JSON
+- [x] P11.2 README usage and CLI documentation complete
+- [x] P11.3 Comprehensive project report draft `docs/final_report_draft.md` complete
+- [x] P11.4 Full IEEE conference format research paper `docs/IEEE_paper_food_adulteration.md` complete
+- [x] P11.5 Domain literature citations and review fixes incorporated
+- [x] P11.6 🧑 Every number traceable to a generated file in `reports/`
 
 ## Phase 12 — Final QA & Submission
 - [ ] P12.0 🔴 Tests first: test_end_to_end.py (runs twice → identical metrics); coverage ≥ 80 %

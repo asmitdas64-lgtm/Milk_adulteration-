@@ -19,6 +19,7 @@ from foodadult.evaluation.evaluate import evaluate_models
 from foodadult.evaluation.interpret import run_interpretability_analysis
 from foodadult.evaluation.ablation import run_all_ablations
 from foodadult.predict import predict_csv
+from foodadult.evaluation.report import generate_results_markdown
 
 
 def parse_args():
@@ -335,6 +336,21 @@ def execute_predict(model_path: str, in_csv: str, out_csv: str):
     print(res_df[preview_cols].head(5).to_string(index=False))
 
 
+def execute_report(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Auto-generating reports/RESULTS.md from computed metric artifacts...")
+    out_file = generate_results_markdown(reports_dir)
+
+    logger.info(f"Report successfully compiled to {out_file}")
+    print(f"\n[SUCCESS] Empirical Results Summary Generated!")
+    print(f"- Output Report: {out_file}")
+    print("=" * 60)
+    print(f"Generated directly from test_metrics.json, tuned_cv.json, and final_importance.csv.")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -359,6 +375,8 @@ def main():
         execute_ablate(args.config, args.model)
     elif args.command == "predict":
         execute_predict(args.model, args.input, args.output)
+    elif args.command == "report":
+        execute_report(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

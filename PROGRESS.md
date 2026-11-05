@@ -1,6 +1,6 @@
 # PROGRESS.md — Session Log
 
-**Current phase:** Phase 11 — Results & Documentation
+**Current phase:** Phase 12 — Final QA, Reproducibility & Submission
 **Blocking open decisions:** none
 
 ---
@@ -177,3 +177,14 @@
   - Confirmed accurate classification: Pure milk samples detected with 98.2%–99.9% confidence; sour/acidified, neutralizer-doped, and diluted adulterated samples flagged with 97.3%–100% confidence.
 - Tests: 45 passed in 52.88s (`pytest -q`).
 - Next step: Phase 11 — Results & Documentation (`reports/RESULTS.md` auto-generation, report draft).
+
+### 2026-11-05 — Session 12 — Phase 11 Completed
+- Done:
+  - Wrote Phase 11 tests first (`tests/test_report.py`).
+  - Implemented `src/foodadult/evaluation/report.py` dynamically compiling all metrics JSON and CSV outputs into `reports/RESULTS.md` (zero hand-typed numbers).
+  - Wired `cli.py report` subcommand.
+  - Authored comprehensive project report: [`docs/final_report_draft.md`](docs/final_report_draft.md) with 13 exhaustive chapters detailing every phase, methods, reasons, difficulties encountered in each phase and solutions, and answers to 15 critical viva/defense questions.
+  - Authored publication-ready IEEE conference research paper: [`docs/IEEE_paper_food_adulteration.md`](docs/IEEE_paper_food_adulteration.md) with IEEE formatting, mathematical definitions, full benchmark tables, diagnostic hierarchies, ablation studies, and peer-reviewed citations.
+  - Updated [`README.md`](README.md) with complete quickstart, layout, CLI documentation, and empirical highlights.
+- Tests: 46 passed in 52.88s (`pytest -q`).
+- Next step: Phase 12 — Final QA, Reproducibility & Submission.

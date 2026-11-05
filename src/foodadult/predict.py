@@ -107,3 +107,4 @@ def predict_csv(
     out_csv.parent.mkdir(parents=True, exist_ok=True)
     predictions_df.to_csv(out_csv, index=False)
     return predictions_df
+
