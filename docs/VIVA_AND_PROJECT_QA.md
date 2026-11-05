@@ -32,6 +32,10 @@
 18. [What is our EXACT real-world accuracy and performance breakdown?](#q18-actual-accuracy-metrics)
 19. [What is a "Dummy Baseline" in Machine Learning? Why do we use it?](#q19-dummy-baseline)
 20. [How were the models compared, trained better, and tuned better? (Tournament & Hyperparameter Optimization)](#q20-model-comparison-and-tuning)
+21. [How did we take model performance from ~75%–80% up to 99.5%? (The 5-Step Performance Ladder)](#q21-performance-ladder)
+22. [What is Cross-Validation? How does Stratified 5-Fold Cross-Validation work?](#q22-cross-validation-explained)
+23. [Were extreme values replaced by the median? (Important: Outlier Winsorization vs. Imputation)](#q23-outliers-vs-median)
+24. [What about missing values? How does the pipeline handle them?](#q24-missing-values-pipeline)
 
 ---
 
@@ -434,7 +438,99 @@ Raw models often struggle with sensor data. We trained them inside an automated 
 
 ---
 
+<a id="q21-performance-ladder"></a>
+### Q21: How did we take model performance from ~75%–80% up to 99.5%? (The 5-Step Performance Ladder)
+
+Many students wonder: *"Did the model just give 99.5% out of the box, or how was it progressively improved?"*  
+Here is the exact step-by-step engineering progression:
+
+1. **Step 1: Starting at the Floor (75.8% — Blind Guessing)**  
+   - A naive model (Dummy Baseline) simply predicted "Adulterated" for everything because 75.8% of the data is adulterated. It had **0% detection of pure milk** ($F_1 = 0.86$, pure recall = $0.00$).
+2. **Step 2: Linear Baseline (80%–94% — Single-Feature & Linear Models)**  
+   - Training a simple linear model or relying primarily on pH achieved only **$75.8\%\text{--}80\%$ accuracy** because linear boundaries cannot separate samples where adulterators artificially neutralized the pH back to $6.6$.
+   - Unscaled features caused `Colour` (255) to drown out `pH` (6.6), degrading distance calculations.
+3. **Step 3: Feature Scaling with `StandardScaler` (94% $\rightarrow$ 96.5%)**  
+   - Applying z-score normalization ($z = \frac{x - \mu}{\sigma}$) put all 7 sensors on an equal mathematical footing.
+   - Immediately, distance-based models (SVM and KNN) jumped from ~88% to ~96% because changes in pH ($0.5$ units) were no longer dwarfed by changes in Colour ($15$ units).
+4. **Step 4: Switching to Non-Linear RBF Kernel (96.5% $\rightarrow$ 98.8%)**  
+   - Linear SVMs and shallow trees drew flat, rigid boundaries that misclassified complex diluted/masked samples.
+   - Replacing the linear kernel with a **Radial Basis Function (RBF) Kernel** mapped the 7 features into an infinite-dimensional space, allowing the model to wrap a smooth, curved 7D ellipsoid around the pure milk cluster.
+5. **Step 5: Systematic Hyperparameter Optimization & IQR Winsorization (98.8% $\rightarrow$ 99.53%)**  
+   - We tuned the regularization cost $C$ from default $1.0$ up to **$100.0$** and tuned $\gamma=\text{'scale'}$. High $C$ penalized training errors heavily, forcing the boundary to close every loophole and eliminating all False Negatives.
+   - We added custom **IQR Winsorization**, which clipped extreme sensor spikes without dropping rows, preserving crucial contaminated signals without distorting support vector margins.
+   - **Final Result on Held-Out Test Set:** **99.53% Accuracy, 100.00% Recall, 0 False Negatives**.
+
+---
+
+<a id="q22-cross-validation-explained"></a>
+### Q22: What is Cross-Validation? How does Stratified 5-Fold Cross-Validation work?
+
+#### 1. The Simple Exam Analogy
+- Imagine you are preparing for a final exam using a textbook with 5 practice tests:
+  - If you only study Tests 1–4 and test yourself on Test 5 once, maybe Test 5 happened to be super easy, giving you a fake sense of confidence.
+- To be 100% sure you truly understand the subject:
+  - **Round 1:** Study Tests 2, 3, 4, 5 $\rightarrow$ Exam on Test 1.
+  - **Round 2:** Study Tests 1, 3, 4, 5 $\rightarrow$ Exam on Test 2.
+  - **Round 3:** Study Tests 1, 2, 4, 5 $\rightarrow$ Exam on Test 3.
+  - **Round 4:** Study Tests 1, 2, 3, 5 $\rightarrow$ Exam on Test 4.
+  - **Round 5:** Study Tests 1, 2, 3, 4 $\rightarrow$ Exam on Test 5.
+  - Finally, **average all 5 exam scores!**
+- If you score ~99% on *all 5 rounds*, you have mathematically proven you didn't just get lucky on one test.
+
+#### 2. Technical Definition in Machine Learning
+- **5-Fold Cross-Validation:** The 847 training samples are split into 5 equal parts (folds of ~169 samples each). The model is trained 5 times. Each time, 4 folds are used for training and 1 fold is held out for validation.
+- **Why "Stratified"?**  
+  In standard random splitting, Fold 1 might accidentally end up with 95% adulterated milk, while Fold 2 has only 50%. Stratification forces every single fold to have the exact same class ratio (**75.8% Adulterated : 24.2% Pure**).
+- **Our Cross-Validation Result:**  
+  Our SVM achieved an average cross-validation score of **0.9992 with a standard deviation of only $\pm 0.0016$**, proving the model is exceptionally stable and not dependent on a lucky split.
+
+---
+
+<a id="q23-outliers-vs-median"></a>
+### Q23: Were extreme values replaced by the median? (Important: Outlier Winsorization vs. Imputation)
+
+**NO! Extreme values were NOT replaced by the median. That is a critical distinction!**
+
+#### Why Replacing Outliers with the Median Would Be a Catastrophic Error:
+- Think about what that would mean:
+  - Suppose a sample has $\text{pH} = 3.5$ (dangerously sour, curdled, inedible milk).
+  - The median pH of milk in the dataset is $\approx 6.7$ (healthy fresh milk).
+  - If you replace the extreme value ($3.5$) with the median ($6.7$), **you have just magically turned spoiled milk into pure fresh milk in your dataset!**
+  - The machine learning model would be blinded to spoiled milk and would fail completely in the real world.
+
+#### What We Actually Did:
+We separated the problem into two distinct stages:
+
+1. **Missing Values (Empty cells / NaNs) $\rightarrow$ Replaced by Median (`SimpleImputer`):**  
+   If a sensor failed to read a value, we imputed the median because the median is unaffected by extreme outliers.
+2. **Extreme Outliers $\rightarrow$ Clipped via IQR Winsorization (`IQRClipper`):**  
+   We used the Interquartile Range ($IQR = Q_3 - Q_1$) to find the outer boundaries:
+   $$\text{Lower Bound} = Q_1 - 1.5 \times IQR, \quad \text{Upper Bound} = Q_3 + 1.5 \times IQR$$
+   - If Temperature was $90^\circ\text{C}$ (where upper fence is $55^\circ\text{C}$), it was **clipped to $55^\circ\text{C}$**.
+   - It **remains an extreme high value**, signaling dangerous heat to the model, but it is bounded so it does not explode the mathematical distance calculations in the SVM.
+
+---
+
+<a id="q24-missing-values-pipeline"></a>
+### Q24: What about missing values? How does the pipeline handle them?
+
+- **In the Raw Training Dataset:**
+  - There were **0 missing values** (all 1,059 samples had complete readings across all 7 sensors).
+- **In Real-World Production Deployment:**
+  - What happens if our model is deployed on an IoT milk analyzer in a village dairy and one sensor wire disconnects or sends a `NaN`?
+  - Our production pipeline automatically includes:
+    ```python
+    SimpleImputer(strategy='median')
+    ```
+  - If a live measurement arrives with a missing feature, the imputer fills that missing value with the **median learned from the training dataset**.
+- **Why Median instead of Mean?**
+  - The **mean (average)** is highly sensitive to extreme outliers. For example, if most temperatures are $37^\circ\text{C}$ but a few boiled samples are $90^\circ\text{C}$, the mean gets pulled artificially high to $44^\circ\text{C}$.
+  - The **median (middle value)** is mathematically robust: extreme values have zero influence on the median. Therefore, the median represents the true typical physical baseline.
+
+---
+
 *This document is continuously updated with every new question asked during project sessions.*
+
 
 
 
