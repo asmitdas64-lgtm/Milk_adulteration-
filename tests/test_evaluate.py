@@ -100,3 +100,4 @@ def test_evaluate_models_runs_and_saves_artifacts(eval_env):
     assert "model_name" in meta
     assert "test_metrics" in meta
     assert "features" in meta
+

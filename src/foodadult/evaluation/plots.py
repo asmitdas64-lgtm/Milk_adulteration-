@@ -119,3 +119,4 @@ def plot_comparison_bar(results_dict: dict, save_path: str | Path):
     plt.tight_layout()
     plt.savefig(save_path, dpi=150)
     plt.close()
+

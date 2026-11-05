@@ -1,0 +1,3 @@
+[2026-11-05 19:11:04] [INFO] [run_20261105_191104]: Starting Phase 8 Interpretability & Feature Hierarchy Analysis...
+[2026-11-05 19:11:13] [INFO] [run_20261105_191104]: Interpretability analysis complete.
+[2026-11-05 19:11:13] [INFO] [run_20261105_191104]: Top diagnostic features: ['ph', 'turbidity', 'colour']

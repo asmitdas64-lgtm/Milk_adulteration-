@@ -32,3 +32,4 @@ def load_model(filepath: str | Path) -> Tuple[Any, dict]:
             metadata = json.load(f)
 
     return model, metadata
+

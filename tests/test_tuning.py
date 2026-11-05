@@ -83,3 +83,4 @@ def test_tune_all_models_creates_artifacts(tiny_dataset):
     assert (metrics_dir / "tuned_cv.json").is_file()
     assert (metrics_dir / "tuning_dt.csv").is_file()
     assert (metrics_dir / "tuning_knn.csv").is_file()
+

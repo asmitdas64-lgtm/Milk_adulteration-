@@ -52,3 +52,4 @@ def test_compute_metrics_without_y_score():
     assert res["roc_auc"] is None
     assert res["pr_auc"] is None
     assert pytest.approx(res["recall"], abs=1e-5) == 0.5
+

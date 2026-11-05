@@ -16,6 +16,7 @@ from foodadult.features.selection import run_feature_selection_pipeline
 from foodadult.logging_utils import create_run_directory, setup_logger
 from foodadult.models.train import evaluate_baseline_models, tune_all_models
 from foodadult.evaluation.evaluate import evaluate_models
+from foodadult.evaluation.interpret import run_interpretability_analysis
 
 
 def parse_args():
@@ -49,6 +50,10 @@ def parse_args():
     # Command: evaluate
     cmd_eval = subparsers.add_parser("evaluate", help="Evaluate models on test set once")
     cmd_eval.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
+
+    # Command: interpret
+    cmd_interp = subparsers.add_parser("interpret", help="Run interpretability & feature importance analysis")
+    cmd_interp.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
 
     # Command: predict
     cmd_pred = subparsers.add_parser("predict", help="Predict adulteration on new samples CSV")
@@ -258,6 +263,31 @@ def execute_evaluate(config_path: str):
     print(f"- Visualizations:   {reports_dir}/figures/ (eval_roc_curves.png, eval_pr_curves.png, etc.)")
 
 
+def execute_interpret(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting Phase 8 Interpretability & Feature Hierarchy Analysis...")
+    res = run_interpretability_analysis(cfg)
+    ranking_df = res["ranking"]
+
+    logger.info("Interpretability analysis complete.")
+    logger.info(f"Top diagnostic features: {res['top_features']}")
+
+    print("\n[SUCCESS] Interpretability & Feature Ranking Analysis Complete (Phase 8)!")
+    print("=" * 80)
+    cols_to_show = ["test_rank", "feature", "test_perm_importance", "train_rf_importance"]
+    present_cols = [c for c in cols_to_show if c in ranking_df.columns]
+    print(ranking_df[present_cols].to_string(index=False))
+    print("=" * 80)
+    print(f"\n[TOP DIAGNOSTIC PARAMETERS]: {', '.join([f.upper() for f in res['top_features']])}")
+    print(f"- Feature Importance Table: {reports_dir}/features/final_importance.csv")
+    print(f"- Interpretability Summary: {reports_dir}/features/interpretability_summary.md")
+    print(f"- Visualizations:           {reports_dir}/figures/interpret_perm_importance.png")
+    print(f"                            {reports_dir}/figures/tree_interpretability.png")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -276,6 +306,8 @@ def main():
         execute_train_or_tune(args.config, args.models, args.tune)
     elif args.command == "evaluate":
         execute_evaluate(args.config)
+    elif args.command == "interpret":
+        execute_interpret(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

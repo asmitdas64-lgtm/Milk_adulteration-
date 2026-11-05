@@ -1,6 +1,6 @@
 # PROGRESS.md — Session Log
 
-**Current phase:** Phase 8 — Interpretability & Feature Ranking Analysis
+**Current phase:** Phase 9 — Robustness & Ablations
 **Blocking open decisions:** none (D-11 is for Phase 10)
 
 ---
@@ -129,3 +129,23 @@
   - Saved artifacts: `reports/metrics/test_metrics.json`, `test_metrics.csv`, `test_metrics.md`, `models/best_model.joblib`, `models/best_model_meta.json`, and all figures in `reports/figures/`.
 - Tests: 36 passed in 44.59s (`pytest -q`).
 - Next step: Phase 8 — Interpretability & Feature Ranking Analysis.
+
+### 2026-11-05 — Session 9 — Phase 8 Completed
+- Done:
+  - Wrote Phase 8 tests first (`tests/test_interpret.py`).
+  - Implemented `src/foodadult/evaluation/interpret.py` computing permutation importance on the held-out test set, comparing test importance with Phase 4 training importance, plotting decision tree rules, and generating diagnostic hierarchy summaries.
+  - Wired `cli.py interpret` subcommand.
+  - Executed CLI `python -m foodadult.cli interpret`.
+  - Confirmed feature ranking hierarchy on test set:
+    1. `ph`: 0.2088 F1 drop (unanimous #1 diagnostic parameter)
+    2. `turbidity`: 0.0839 F1 drop
+    3. `colour`: 0.0654 F1 drop
+    4. `odor`: 0.0600 F1 drop
+    5. `temprature`: 0.0397 F1 drop
+    6. `fat`: 0.0382 F1 drop
+    7. `taste`: 0.0355 F1 drop
+  - Generated white-box decision tree flowchart showing exact classification decision boundaries.
+  - Formulated practical low-cost screening recommendations (Outcome 5 of report).
+  - Saved artifacts: `reports/features/final_importance.csv`, `reports/features/interpretability_summary.md`, `reports/figures/interpret_perm_importance.png`, and `reports/figures/tree_interpretability.png`.
+- Tests: 39 passed in 49.33s (`pytest -q`).
+- Next step: Phase 9 — Robustness & Ablations.

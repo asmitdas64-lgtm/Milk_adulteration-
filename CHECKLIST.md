@@ -92,11 +92,11 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P7.5 `models/best_model.joblib` + `best_model_meta.json` saved (Winning model: SVM)
 
 ## Phase 8 — Interpretability
-- [ ] P8.0 🔴 Tests first: test_interpret.py
-- [ ] P8.1 Permutation importance of best model on test
-- [ ] P8.2 Compare with Phase 4 ranking
-- [ ] P8.3 Decision-tree visualisation (top levels)
-- [ ] P8.4 Final ranked "most useful lab tests" list
+- [x] P8.0 🔴 Tests first: test_interpret.py (all features present, finite, ranking comparison)
+- [x] P8.1 Permutation importance of best model on test (pH is #1 with 0.2088 F1 drop)
+- [x] P8.2 Compare with Phase 4 ranking (consistent hierarchy across train and test)
+- [x] P8.3 Decision-tree visualisation (top levels) saved to `reports/figures/tree_interpretability.png`
+- [x] P8.4 Final ranked "most useful lab tests" list (`reports/features/final_importance.csv` + summary MD)
 
 ## Phase 9 — Robustness & Ablations
 - [ ] P9.0 🔴 Tests first: test_ablation.py
