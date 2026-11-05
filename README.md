@@ -20,3 +20,4 @@ Predicting food adulteration based on low-cost physicochemical parameters using 
    ```bash
    python -m foodadult.cli all
    ```
+

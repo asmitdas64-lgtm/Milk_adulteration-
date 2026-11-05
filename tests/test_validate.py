@@ -79,3 +79,4 @@ def test_validate_dataframe_flags_out_of_range_values(valid_config):
     assert report["is_valid"] is True
     assert "ph" in report["out_of_range"]
     assert report["out_of_range"]["ph"]["count"] == 1
+

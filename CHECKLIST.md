@@ -39,15 +39,15 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P1.7 🧑 Human confirms columns + label mapping
 
 ## Phase 2 — EDA
-- [ ] P2.0 🔴 Tests first: test_eda.py
-- [ ] P2.1 `eda.py`: summary stats, missingness, duplicates
-- [ ] P2.2 Class balance computed and plotted
-- [ ] P2.3 Per-class feature distributions (hist/box)
-- [ ] P2.4 Correlation heatmap
-- [ ] P2.5 IQR outlier counts per feature per class
-- [ ] P2.6 `reports/eda/summary.json` + `data_card.md` complete
-- [ ] P2.7 `notebooks/01_eda.ipynb` narrative (uses src functions only)
-- [ ] P2.8 🧑 Imbalance decision D-07 confirmed
+- [x] P2.0 🔴 Tests first: test_eda.py
+- [x] P2.1 `eda.py`: summary stats, missingness, duplicates
+- [x] P2.2 Class balance computed and plotted
+- [x] P2.3 Per-class feature distributions (hist/box)
+- [x] P2.4 Correlation heatmap
+- [x] P2.5 IQR outlier counts per feature per class
+- [x] P2.6 `reports/eda/summary.json` + `data_card.md` complete
+- [x] P2.7 `notebooks/01_eda.ipynb` narrative (uses src functions only)
+- [x] P2.8 🧑 Imbalance decision D-07 confirmed (minority = 24.17% >= 20%; standard stratified CV confirmed)
 
 ## Phase 3 — Split & Preprocessing Pipeline
 - [ ] P3.0 🔴 Tests first: test_split.py, test_transformers.py, test_preprocess.py, test_leakage.py

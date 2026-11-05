@@ -29,3 +29,4 @@ def load_config(config_path: Union[str, Path]) -> Dict[str, Any]:
         raise ValueError(f"Config file {path} did not parse into a dictionary.")
 
     return config
+

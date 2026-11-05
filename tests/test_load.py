@@ -41,3 +41,4 @@ def test_make_binary_label_unknown_raises():
     mapping = {"high": 0, "low": 1}
     with pytest.raises(ValueError, match="Unmapped label values found"):
         make_binary_label(series, mapping)
+

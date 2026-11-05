@@ -64,3 +64,4 @@ def make_binary_label(series: pd.Series, mapping: Dict[str, int]) -> pd.Series:
 
     mapped = series.map(mapping)
     return mapped.astype(int)
+

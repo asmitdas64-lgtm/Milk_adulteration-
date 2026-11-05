@@ -1,0 +1,4 @@
+[2026-11-05 13:59:01] [INFO] [run_20261105_135901]: Starting Exploratory Data Analysis (EDA)...
+[2026-11-05 13:59:04] [INFO] [run_20261105_135901]: EDA Complete. Rows analyzed: 1059
+[2026-11-05 13:59:04] [INFO] [run_20261105_135901]: Class distribution: {'1': 803, '0': 256}
+[2026-11-05 13:59:04] [INFO] [run_20261105_135901]: Artifacts saved to reports/eda and reports/figures

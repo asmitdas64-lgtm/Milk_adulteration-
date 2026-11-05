@@ -8,6 +8,7 @@ import pandas as pd
 from foodadult.config import load_config
 from foodadult.data.load import load_raw, standardize_columns, make_binary_label
 from foodadult.data.validate import validate_dataframe
+from foodadult.eda import run_eda
 from foodadult.logging_utils import create_run_directory, setup_logger
 
 
@@ -90,7 +91,7 @@ def run_validate(config_path: str):
     logger.info("Executing validation checks against schema and physical bounds...")
     report = validate_dataframe(clean_df, cfg)
     logger.info(f"Validation successful: rows={report['row_count']}, duplicates={report['duplicate_count']}")
-    
+
     if report["out_of_range"]:
         logger.warning(f"Out of physical bounds warnings: {report['out_of_range']}")
 
@@ -107,6 +108,25 @@ def run_validate(config_path: str):
     print(f"Total samples: {len(clean_df)} | Class distribution: {class_counts}")
 
 
+def execute_eda(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting Exploratory Data Analysis (EDA)...")
+    result = run_eda(cfg)
+    summary = result["summary"]
+    
+    logger.info(f"EDA Complete. Rows analyzed: {summary['row_count']}")
+    logger.info(f"Class distribution: {summary['class_balance']['counts']}")
+    logger.info(f"Artifacts saved to {reports_dir}/eda and {reports_dir}/figures")
+
+    print(f"\n[SUCCESS] Exploratory Data Analysis completed!")
+    print(f"- Data Card: {reports_dir}/eda/data_card.md")
+    print(f"- Summary JSON: {reports_dir}/eda/summary.json")
+    print(f"- Figures: {reports_dir}/figures/ (class balance, distributions, correlation matrix)")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -115,6 +135,8 @@ def main():
 
     if args.command == "validate":
         run_validate(args.config)
+    elif args.command == "eda":
+        execute_eda(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

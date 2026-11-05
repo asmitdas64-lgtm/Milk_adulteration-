@@ -77,3 +77,4 @@ def validate_dataframe(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, An
         "missing_counts": missing_counts,
         "out_of_range": out_of_range,
     }
+

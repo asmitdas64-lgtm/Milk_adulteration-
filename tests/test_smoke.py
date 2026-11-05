@@ -27,3 +27,4 @@ def test_cli_help():
     )
     assert result.returncode == 0
     assert "Food Adulteration ML Pipeline CLI" in result.stdout
+

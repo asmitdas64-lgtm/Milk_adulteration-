@@ -52,3 +52,4 @@ def create_run_directory(base_reports_dir: Path, config: Dict[str, Any]) -> Tupl
 
     logger = setup_logger(name=f"run_{timestamp}", log_file=run_dir / "run.log")
     return run_dir, logger
+
