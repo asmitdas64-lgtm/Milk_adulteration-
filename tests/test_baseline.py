@@ -68,3 +68,4 @@ def test_evaluate_baseline_models(mock_dataset):
     metrics_dir = reports_dir / "metrics"
     assert (metrics_dir / "baseline_cv.json").is_file()
     assert (metrics_dir / "baseline_cv.csv").is_file()
+

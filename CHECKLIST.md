@@ -74,22 +74,22 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P5.4 All 5 models beat Dummy on CV F1 (Dummy: 0.8623, Models: 0.9631 - 0.9984)
 
 ## Phase 6 — Hyper-parameter Tuning
-- [ ] P6.0 🔴 Tests first: tuning tests in test_train.py (params within grid, reproducible)
-- [ ] P6.1 RF GridSearchCV
-- [ ] P6.2 SVM (RBF) GridSearchCV
-- [ ] P6.3 k-NN GridSearchCV over k & metric
-- [ ] P6.4 DT GridSearchCV
-- [ ] P6.5 GB RandomizedSearchCV (n_iter=30)
-- [ ] P6.6 `best_params.json`, `tuned_cv.json`, per-model `tuning_*.csv` saved
-- [ ] P6.7 Best model selected by CV rule (D-10) and recorded BEFORE test evaluation
+- [x] P6.0 🔴 Tests first: tuning tests in test_tuning.py (params within grid, reproducible)
+- [x] P6.1 RF GridSearchCV
+- [x] P6.2 SVM (RBF) GridSearchCV
+- [x] P6.3 k-NN GridSearchCV over k & metric
+- [x] P6.4 DT GridSearchCV
+- [x] P6.5 GB RandomizedSearchCV (n_iter=20)
+- [x] P6.6 `best_params.json`, `tuned_cv.json`, per-model `tuning_*.csv` saved
+- [x] P6.7 Best model selected by CV rule (D-10) and recorded BEFORE test evaluation (SVM selected: F1=0.9992, Recall=1.0000)
 
 ## Phase 7 — Final Test Evaluation (one shot)
-- [ ] P7.0 🔴 Tests first: test_metrics.py (hand-computed), test_evaluate.py
-- [ ] P7.1 Refit tuned pipelines on full train
-- [ ] P7.2 Single test-set prediction; metrics (Acc, P, R, F1, ROC-AUC, PR-AUC, CM)
-- [ ] P7.3 `test_metrics.json/.csv/.md`
-- [ ] P7.4 Confusion matrices, ROC overlay, PR curves, comparison bar chart
-- [ ] P7.5 `models/best_model.joblib` + `best_model_meta.json`
+- [x] P7.0 🔴 Tests first: test_metrics.py (hand-computed), test_evaluate.py
+- [x] P7.1 Refit tuned pipelines on full train (847 samples)
+- [x] P7.2 Single test-set prediction; metrics (Acc=99.53%, P=99.38%, R=100%, F1=0.9969, ROC-AUC=1.0000, PR-AUC=1.0000)
+- [x] P7.3 `test_metrics.json/.csv/.md` saved in `reports/metrics/`
+- [x] P7.4 Confusion matrices, ROC overlay, PR curves, comparison bar chart saved in `reports/figures/`
+- [x] P7.5 `models/best_model.joblib` + `best_model_meta.json` saved (Winning model: SVM)
 
 ## Phase 8 — Interpretability
 - [ ] P8.0 🔴 Tests first: test_interpret.py

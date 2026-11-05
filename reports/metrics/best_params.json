@@ -1,0 +1,23 @@
+{
+  "rf": {
+    "clf__max_depth": null,
+    "clf__min_samples_leaf": 1,
+    "clf__n_estimators": 100
+  },
+  "svm": {
+    "clf__C": 100.0,
+    "clf__gamma": "scale"
+  },
+  "knn": {
+    "clf__metric": "euclidean",
+    "clf__n_neighbors": 1
+  },
+  "dt": {
+    "clf__max_depth": null,
+    "clf__min_samples_split": 2
+  },
+  "gb": {
+    "clf__n_estimators": 100,
+    "clf__learning_rate": 0.1
+  }
+}

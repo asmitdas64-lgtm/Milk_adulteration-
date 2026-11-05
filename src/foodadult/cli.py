@@ -1,6 +1,7 @@
 """Command-line interface for the Food Adulteration ML Pipeline."""
 
 import argparse
+import json
 import sys
 from pathlib import Path
 from typing import Optional
@@ -13,7 +14,8 @@ from foodadult.data.validate import validate_dataframe
 from foodadult.eda import run_eda
 from foodadult.features.selection import run_feature_selection_pipeline
 from foodadult.logging_utils import create_run_directory, setup_logger
-from foodadult.models.train import evaluate_baseline_models
+from foodadult.models.train import evaluate_baseline_models, tune_all_models
+from foodadult.evaluation.evaluate import evaluate_models
 
 
 def parse_args():
@@ -39,9 +41,10 @@ def parse_args():
     cmd_features.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
 
     # Command: train
-    cmd_train = subparsers.add_parser("train", help="Train baseline and tuned ML models")
+    cmd_train = subparsers.add_parser("train", help="Train baseline or tuned ML models")
     cmd_train.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
-    cmd_train.add_argument("--models", nargs="+", default=None, help="Specific models to train")
+    cmd_train.add_argument("--models", nargs="+", default=None, help="Specific models to train/tune")
+    cmd_train.add_argument("--tune", action="store_true", help="Execute hyperparameter tuning search")
 
     # Command: evaluate
     cmd_eval = subparsers.add_parser("evaluate", help="Evaluate models on test set once")
@@ -174,33 +177,85 @@ def execute_select_features(config_path: str):
     print(f"- Artifacts saved to: {reports_dir}/features/ and {reports_dir}/figures/feat_importance.png")
 
 
-def execute_train_baseline(config_path: str, models: Optional[list]):
+def execute_train_or_tune(config_path: str, models: Optional[list], tune: bool):
     cfg = load_config(config_path)
     reports_dir = Path(cfg["paths"]["reports_dir"])
     run_dir, logger = create_run_directory(reports_dir, cfg)
 
-    logger.info(f"Starting Baseline Models 5-Fold Stratified Cross-Validation on Train Set...")
-    results = evaluate_baseline_models(cfg, model_keys=models)
+    if tune:
+        logger.info("Starting Hyperparameter Optimization Search (Phase 6)...")
+        tune_all_models(cfg, model_keys=models)
+        
+        metrics_csv = reports_dir / "metrics" / "tuned_cv.csv"
+        tuned_df = pd.read_csv(metrics_csv)
+        
+        with open(reports_dir / "metrics" / "tuned_cv.json", "r", encoding="utf-8") as f:
+            meta = json.load(f)
+            best_model_name = meta["selected_best_model"]
 
-    metrics_csv = reports_dir / "metrics" / "baseline_cv.csv"
+        print(f"\n[SUCCESS] Hyperparameter Optimization Complete!")
+        print("=" * 80)
+        print(tuned_df[["model", "f1_mean", "accuracy_mean", "recall_mean", "precision_mean", "roc_auc_mean"]].to_string(index=False))
+        print("=" * 80)
+        print(f"\n[WINNING MODEL] (Selected by Decision D-10): [{best_model_name.upper()}]")
+        print(f"- Selection rule: Highest CV F1 with Recall tie-breaker")
+        print(f"- Best parameters saved to: {reports_dir}/metrics/best_params.json")
+        print(f"- Tuning curves saved to: {reports_dir}/metrics/tuning_<model>.csv")
+    else:
+        logger.info("Starting Baseline Models 5-Fold Stratified Cross-Validation on Train Set...")
+        results = evaluate_baseline_models(cfg, model_keys=models)
+
+        metrics_csv = reports_dir / "metrics" / "baseline_cv.csv"
+        summary_df = pd.read_csv(metrics_csv)
+
+        dummy_f1 = results["dummy"]["f1_mean"]
+        all_beat_dummy = True
+        for m in [k for k in results.keys() if k != "dummy"]:
+            m_f1 = results[m]["f1_mean"]
+            if m_f1 <= dummy_f1:
+                all_beat_dummy = False
+
+        print(f"\n[SUCCESS] Baseline Models Evaluation Complete!")
+        print("=" * 70)
+        print(summary_df[["model", "f1_mean", "accuracy_mean", "recall_mean", "precision_mean", "roc_auc_mean"]].to_string(index=False))
+        print("=" * 70)
+        print(f"All real models beat dummy baseline: {'YES' if all_beat_dummy else 'NO'}")
+        print(f"Artifacts saved to: {reports_dir}/metrics/baseline_cv.csv and baseline_cv.json")
+
+
+def execute_evaluate(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting One-shot Evaluation on Held-out Test Set (Phase 7)...")
+    results = evaluate_models(cfg)
+
+    # Load summary CSV for clean printing
+    metrics_csv = reports_dir / "metrics" / "test_metrics.csv"
     summary_df = pd.read_csv(metrics_csv)
 
-    dummy_f1 = results["dummy"]["f1_mean"]
-    logger.info(f"DummyClassifier baseline F1: {dummy_f1:.4f}")
-    all_beat_dummy = True
-    for m in [k for k in results.keys() if k != "dummy"]:
-        m_f1 = results[m]["f1_mean"]
-        beats = m_f1 > dummy_f1
-        if not beats:
-            all_beat_dummy = False
-        logger.info(f"Model '{m}': CV F1 = {m_f1:.4f} (beats dummy: {beats})")
+    models_dir = Path(cfg["paths"].get("models_dir", "models"))
+    meta_path = models_dir / "best_model_meta.json"
+    with open(meta_path, "r", encoding="utf-8") as f:
+        meta = json.load(f)
 
-    print(f"\n[SUCCESS] Baseline Models Evaluation Complete!")
-    print("=" * 70)
-    print(summary_df[["model", "f1_mean", "accuracy_mean", "recall_mean", "precision_mean", "roc_auc_mean"]].to_string(index=False))
-    print("=" * 70)
-    print(f"All real models beat dummy baseline: {'YES' if all_beat_dummy else 'NO'}")
-    print(f"Artifacts saved to: {reports_dir}/metrics/baseline_cv.csv and baseline_cv.json")
+    logger.info(f"Evaluation complete. Winning model: {meta['model_name'].upper()}")
+    logger.info(f"Test metrics saved to {metrics_csv}")
+
+    print("\n[SUCCESS] Final Test Set Evaluation Complete (One-Shot)!")
+    print("=" * 80)
+    cols_to_print = ["model", "f1", "accuracy", "recall", "precision", "specificity", "roc_auc"]
+    print(summary_df[cols_to_print].to_string(index=False))
+    print("=" * 80)
+    print(f"\n[WINNING MODEL] (Frozen before test eval per Decision D-10): [{meta['model_name'].upper()}]")
+    print(f"- Test F1 Score:    {meta['test_metrics']['f1']:.4f}")
+    print(f"- Test Accuracy:    {meta['test_metrics']['accuracy']:.4%}")
+    print(f"- Test Recall:      {meta['test_metrics']['recall']:.4f}")
+    print(f"- Test ROC-AUC:     {meta['test_metrics']['roc_auc']:.4f}")
+    print(f"- Best Model saved: {models_dir / 'best_model.joblib'}")
+    print(f"- Metadata saved:   {meta_path}")
+    print(f"- Visualizations:   {reports_dir}/figures/ (eval_roc_curves.png, eval_pr_curves.png, etc.)")
 
 
 def main():
@@ -218,7 +273,9 @@ def main():
     elif args.command == "select-features":
         execute_select_features(args.config)
     elif args.command == "train":
-        execute_train_baseline(args.config, args.models)
+        execute_train_or_tune(args.config, args.models, args.tune)
+    elif args.command == "evaluate":
+        execute_evaluate(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

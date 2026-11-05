@@ -1,0 +1,66 @@
+{
+  "models": {
+    "rf": {
+      "f1_mean": 0.9984434855023091,
+      "f1_std": 0.0019064293538908568,
+      "accuracy_mean": 0.997640097459102,
+      "accuracy_std": 0.0028902994923177268,
+      "recall_mean": 0.9984375,
+      "recall_std": 0.003125,
+      "precision_mean": 0.9984615384615385,
+      "precision_std": 0.003076923076923066,
+      "roc_auc_mean": 1.0,
+      "roc_auc_std": 0.0
+    },
+    "svm": {
+      "f1_mean": 0.9992277992277993,
+      "f1_std": 0.0015444015444015416,
+      "accuracy_mean": 0.9988235294117647,
+      "accuracy_std": 0.00235294117647058,
+      "recall_mean": 1.0,
+      "recall_std": 0.0,
+      "precision_mean": 0.9984615384615385,
+      "precision_std": 0.003076923076923066,
+      "roc_auc_mean": 0.9986764983928909,
+      "roc_auc_std": 0.002647003214218202
+    },
+    "knn": {
+      "f1_mean": 0.9992156862745099,
+      "f1_std": 0.0015686274509803865,
+      "accuracy_mean": 0.9988165680473372,
+      "accuracy_std": 0.002366863905325456,
+      "recall_mean": 0.9984375,
+      "recall_std": 0.003125,
+      "precision_mean": 1.0,
+      "precision_std": 0.0,
+      "roc_auc_mean": 0.99921875,
+      "roc_auc_std": 0.0015625
+    },
+    "dt": {
+      "f1_mean": 0.996887088560879,
+      "f1_std": 0.0029038054177514643,
+      "accuracy_mean": 0.9952871562826313,
+      "accuracy_std": 0.004403831985117296,
+      "recall_mean": 0.9953367248062015,
+      "recall_std": 0.0038076124701830667,
+      "precision_mean": 0.9984496124031008,
+      "precision_std": 0.003100775193798455,
+      "roc_auc_mean": 0.995229338012857,
+      "roc_auc_std": 0.005912119921427715
+    },
+    "gb": {
+      "f1_mean": 0.9984434855023091,
+      "f1_std": 0.0019064293538908568,
+      "accuracy_mean": 0.997640097459102,
+      "accuracy_std": 0.0028902994923177268,
+      "recall_mean": 0.9984375,
+      "recall_std": 0.003125,
+      "precision_mean": 0.9984615384615385,
+      "precision_std": 0.003076923076923066,
+      "roc_auc_mean": 0.9999621856683684,
+      "roc_auc_std": 7.56286632633607e-05
+    }
+  },
+  "selected_best_model": "svm",
+  "selection_rule": "Highest CV F1 with Recall tie-breaker (Decision D-10)"
+}

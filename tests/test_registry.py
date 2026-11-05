@@ -36,3 +36,4 @@ def test_get_model_returns_full_pipeline(mock_cfg, model_key):
 def test_get_model_unknown_key_raises(mock_cfg):
     with pytest.raises(KeyError, match="Unknown model key"):
         get_model("xgboost", mock_cfg)
+

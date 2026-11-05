@@ -1,7 +1,7 @@
 # PROGRESS.md — Session Log
 
-**Current phase:** Phase 0 — Project Setup & Environment (not started)
-**Blocking open decisions:** D-01, D-02, D-03, D-04, D-06, D-12 (block Phase 1)
+**Current phase:** Phase 8 — Interpretability & Feature Ranking Analysis
+**Blocking open decisions:** none (D-11 is for Phase 10)
 
 ---
 
@@ -80,3 +80,52 @@
   - Saved artifacts: `reports/features/feature_ranking.csv`, `reports/features/selected_features.json`, and `reports/figures/feat_importance.png`.
 - Tests: 21 passed in 33.74s (`pytest -v`).
 - Next step: Phase 5 — Baseline Models.
+
+### 2026-11-05 — Session 6 — Phase 5 Completed
+- Done:
+  - Wrote Phase 5 tests first (`tests/test_registry.py`, `tests/test_baseline.py`).
+  - Implemented `src/foodadult/models/registry.py` building complete Scikit-Learn pipelines for all 6 models: DummyClassifier, RandomForest, SVC(RBF), KNeighbors, DecisionTree, and GradientBoosting.
+  - Implemented `evaluate_baseline_models()` in `src/foodadult/models/train.py` executing 5-Fold Stratified Cross-Validation on `data/processed/train.csv` (847 samples).
+  - Wired CLI `python -m foodadult.cli train`.
+  - Baseline CV results:
+    - `rf`: F1 = 0.9984 | Acc = 99.76% | ROC-AUC = 1.0000
+    - `gb`: F1 = 0.9984 | Acc = 99.76% | ROC-AUC = 0.9999
+    - `knn`: F1 = 0.9977 | Acc = 99.65% | ROC-AUC = 0.9992
+    - `dt`: F1 = 0.9969 | Acc = 99.53% | ROC-AUC = 0.9952
+    - `svm`: F1 = 0.9772 | Acc = 96.57% | ROC-AUC = 0.9978
+    - `dummy`: F1 = 0.8623 | Acc = 75.80% | ROC-AUC = 0.5000
+  - Sanity check confirmed: All 5 supervised models beat the DummyClassifier baseline on CV F1 and ROC-AUC.
+  - Saved artifacts: `reports/metrics/baseline_cv.csv` and `reports/metrics/baseline_cv.json`.
+- Tests: 30 passed in 40.59s (`pytest -v`).
+- Next step: Phase 6 — Hyper-parameter Tuning.
+
+### 2026-11-05 — Session 7 — Phase 6 Completed
+- Done:
+  - Wrote Phase 6 tests first (`tests/test_tuning.py`).
+  - Implemented `tune_model()` and `tune_all_models()` in `src/foodadult/models/train.py` using GridSearchCV (RF, SVM, k-NN, DT) and RandomizedSearchCV (GB) with 5-fold Stratified CV.
+  - Wired `--tune` CLI flag into `cli.py train`.
+  - Executed hyperparameter search on training dataset (847 samples).
+  - Selected winning model per Decision D-10: **SVM (RBF kernel)** with CV F1 = 0.9992, Accuracy = 99.88%, Recall = 1.0000, and ROC-AUC = 0.9987 (best parameters: `C=100.0`, `gamma='scale'`). Random Forest also achieved exceptional performance (CV F1 = 0.9984, ROC-AUC = 1.0000).
+  - Saved artifacts: `reports/metrics/best_params.json`, `reports/metrics/tuned_cv.json`, and per-model tuning curves `tuning_<model>.csv`.
+- Tests: 32 passed in 40.74s (`pytest -q`).
+- Next step: Phase 7 — Final Evaluation on Test Set (One-shot).
+
+### 2026-11-05 — Session 8 — Phase 7 Completed
+- Done:
+  - Wrote Phase 7 tests first (`tests/test_metrics.py`, `tests/test_evaluate.py`).
+  - Implemented `src/foodadult/evaluation/metrics.py` computing Accuracy, Precision, Recall, F1, Specificity, Balanced Accuracy, ROC-AUC, PR-AUC, and Confusion Matrix.
+  - Implemented `src/foodadult/evaluation/plots.py` generating Confusion Matrix heatmaps, overlaid ROC curves, overlaid PR curves, and multi-metric comparison bar charts.
+  - Implemented `src/foodadult/models/persist.py` for model joblib dumping and metadata serialization.
+  - Implemented `src/foodadult/evaluation/evaluate.py` refitting tuned pipelines on full training set (847 samples) and evaluating exactly once on held-out `test.csv` (212 samples).
+  - Wired `cli.py evaluate` subcommand.
+  - Executed CLI `python -m foodadult.cli evaluate`.
+  - Test set results on 212 unseen samples:
+    - `rf`: F1 = 0.9969 | Acc = 99.53% | Recall = 100.0% | Specificity = 98.04% | ROC-AUC = 0.9999
+    - `svm`: F1 = 0.9969 | Acc = 99.53% | Recall = 100.0% | Specificity = 98.04% | ROC-AUC = 1.0000 (Winning Model)
+    - `knn`: F1 = 0.9969 | Acc = 99.53% | Recall = 100.0% | Specificity = 98.04% | ROC-AUC = 0.9902
+    - `dt`: F1 = 0.9969 | Acc = 99.53% | Recall = 100.0% | Specificity = 98.04% | ROC-AUC = 0.9902
+    - `gb`: F1 = 0.9969 | Acc = 99.53% | Recall = 100.0% | Specificity = 98.04% | ROC-AUC = 1.0000
+    - Confusion Matrix for SVM & RF: TN = 50, FP = 1, FN = 0, TP = 161 (Zero missed adulterated samples).
+  - Saved artifacts: `reports/metrics/test_metrics.json`, `test_metrics.csv`, `test_metrics.md`, `models/best_model.joblib`, `models/best_model_meta.json`, and all figures in `reports/figures/`.
+- Tests: 36 passed in 44.59s (`pytest -q`).
+- Next step: Phase 8 — Interpretability & Feature Ranking Analysis.
