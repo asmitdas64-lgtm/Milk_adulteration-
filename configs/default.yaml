@@ -1,0 +1,87 @@
+random_state: 42
+
+paths:
+  raw: data/raw/milknew.csv
+  interim: data/interim/clean.csv
+  processed_dir: data/processed
+  models_dir: models
+  reports_dir: reports
+
+data:
+  target: label
+  raw_target: Grade
+  positive_label: 1
+  features:
+    - ph
+    - temprature
+    - taste
+    - odor
+    - fat
+    - turbidity
+    - colour
+  column_rename:
+    "pH": "ph"
+    "Temprature": "temprature"
+    "Taste": "taste"
+    "Odor": "odor"
+    "Fat ": "fat"
+    "Turbidity": "turbidity"
+    "Colour": "colour"
+    "Grade": "grade"
+  label_mapping:
+    "low": 1       # 1 = Adulterated / Substandard
+    "medium": 1    # 1 = Substandard (safety screening)
+    "high": 0      # 0 = Pure / High Quality
+  ranges:
+    ph: [0.0, 14.0]
+    temprature: [0.0, 100.0]
+    taste: [0, 1]
+    odor: [0, 1]
+    fat: [0, 1]
+    turbidity: [0, 1]
+    colour: [0.0, 300.0]
+
+split:
+  test_size: 0.2
+  stratify: true
+
+preprocess:
+  imputer: median
+  outliers: clip
+  iqr_factor: 1.5
+  scaler: standard
+
+features:
+  corr_threshold: 0.90
+  use_selected_subset: false
+
+cv:
+  n_splits: 5
+  shuffle: true
+  scoring: f1
+
+class_weight: null
+
+models:
+  rf:
+    grid:
+      n_estimators: [100, 300, 500]
+      max_depth: [null, 5, 10, 20]
+      min_samples_leaf: [1, 2, 4]
+  svm:
+    grid:
+      C: [0.1, 1.0, 10.0, 100.0]
+      gamma: ["scale", 0.001, 0.01, 0.1, 1.0]
+  knn:
+    grid:
+      n_neighbors: [1, 3, 5, 7, 9, 11, 13, 15]
+      metric: ["euclidean", "manhattan"]
+  dt:
+    grid:
+      max_depth: [null, 3, 5, 7, 10, 15]
+      min_samples_split: [2, 5, 10, 20]
+  gb:
+    random:
+      learning_rate: [0.01, 0.05, 0.1, 0.2]
+      n_estimators: [50, 100, 200, 300]
+    n_iter: 20

@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+src/foodadult.egg-info/PKG-INFO
+src/foodadult.egg-info/SOURCES.txt
+src/foodadult.egg-info/dependency_links.txt
+src/foodadult.egg-info/requires.txt
+src/foodadult.egg-info/top_level.txt

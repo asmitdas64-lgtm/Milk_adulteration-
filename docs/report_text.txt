@@ -1,0 +1,259 @@
+﻿MACHINE LEARNING FOR PREDICTING FOOD ADULTERATION
+A Minor Project Report submitted to
+Manipal Academy of Higher Education
+in partial fulfilment of the requirement for the award of the degree of
+BACHELOR OF TECHNOLOGY
+in
+Computer Science and Engineering
+Submitted by
+Nadia Cecil   235891048
+Asmit Das   235891248
+Suprathik Narendra    235891216
+Under the guidance of
+Dr. S. Vaishnavi
+Assistant Professor 
+Department of Computer Science and Engineering
+Manipal Institute of Technology
+DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING
+May 2026
+DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING
+Bengaluru
+27th May 2026
+CERTIFICATE
+This is to certify that the minor project titled “Machine Learning for Predicting Food Adulteration” is a record of the Bonafide work done by Nadia Cecil(Reg. No. 235891048), Asmit Das(Reg. No. 235891248) and Suprathik Narendra(Reg. No. 235891216), submitted in partial fulfilment of the requirements for the award of the Degree of Bachelor of Technology (B.Tech.) in COMPUTER SCIENCE AND ENGINEERING of Manipal Institute of Technology Bengaluru, Karnataka (A Constituent Institute of Manipal Academy of Higher Education), during the academic year 2025–2026.
+Dr. S. Vaishnavi
+Assistant Professor CSE Dept. M.I.T, BENGALURU
+Dr. Gururaj H. LHOD, IT Dept.M.I.T, BENGALURU
+ACKNOWLEDGMENTS
+We extend our sincere gratitude to Dr.Iven Jose, Director, Manipal Institute of Technology, Bengaluru, for providing us with the opportunity to undertake this minor project.
+We express our heartfelt thanks to Dr. Gururaj H.LHead of the Department of Information Technology, for the continuous encouragement and support extended throughout the course of this project.
+We are deeply indebted to our project guide, Dr. S. Vaishnavi ,  Assistant Professor , Department of Computer Science and Engineering, for the invaluable guidance, constructive feedback, and constant motivation during the research and planning phase of this work.
+Finally, we thank our families and friends for their unwavering support, patience, and encouragement throughout our academic journey.
+ABSTRACT
+Food adulteration is a critical global concern that poses severe risks to public health, erodes consumer confidence, and compromises the integrity of agricultural and retail supply chains. As perpetrators of food fraud employ increasingly sophisticated methods to mask contaminants, conventional laboratory-based detection methods—such as high-performance chromatography, infrared spectroscopy, and complex chemical titrations—struggle to keep pace. These traditional techniques are often exceedingly time-consuming, prohibitively expensive, and require highly trained personnel, thereby limiting their scalability for routine, continuous quality assurance across decentralized food networks. This project proposes the development of a robust, machine learning (ML)–based system for predicting food adulteration using easily measurable, macro-level physicochemical properties of food samples. The project intends to leverage supervised learning algorithms, specifically employing an ensemble of models including Random Forest, Support Vector Machines (SVM), k-Nearest Neighbours (k-NN), Decision Trees, and Gradient Boosting classifiers. These computational models will be trained on diverse datasets comprising fundamental attributes such as pH levels, density, viscosity, and refractive indices. Advanced feature engineering and selection techniques will be applied to identify the most discriminative attributes, aiming to eliminate redundancy and improve predictive efficiency. Model performance will be rigorously evaluated using standard industry metrics, including overall accuracy, precision, recall, F1-score, and the Area Under the Receiver Operating Characteristic (AUC-ROC) curve. Ultimately, the proposed system is designed to deliver a highly effective, rapid preliminary screening tool that relies on accessible, low-cost physicochemical parameters, democratizing food safety testing for a broader range of stakeholders.
+Table of Contents
+Content
+Page No.
+Acknowledgments
+3
+Abstract
+4
+List of Tables
+6
+List of Figures
+6
+Chapter 1 — INTRODUCTION
+7
+Chapter 2 — LITERATURE REVIEW
+9
+Chapter 3 — OBJECTIVES
+11
+Chapter 4 — PROPOSED METHODOLOGY
+12
+Chapter 5 — EXPECTED OUTCOMES AND CONCLUSION
+15
+REFERENCES
+16
+LIST OF TABLES
+Table No.
+Table Title
+Page No.
+4.1
+Proposed Feature Set and Data Types
+13
+4.2
+Planned Hyperparameter Configuration for ML Models
+14
+4.3
+Proposed Project Timeline
+14
+LIST OF FIGURES
+Figure No.
+Figure Title
+Page No.
+4.1
+Proposed System Architecture — ML Pipeline
+12
+CHAPTER 1
+INTRODUCTION
+1.1 Background
+Food adulteration refers to the deliberate or incidental contamination of food products with inferior, harmful, or non-standard substances, primarily executed for economic gain. This illicit practice encompasses a wide spectrum of malpractices, including the dilution of high-value liquids, substitution of premium ingredients with cheaper alternatives, deliberate mislabelling of origin, and the addition of unapproved, often toxic chemical agents to enhance visual appeal or shelf life. The World Health Organization (WHO) estimates that approximately 600 million cases of foodborne illnesses occur annually worldwide, with adulterated food acting as a significant contributing vector. In developing nations, the economic toll is compounded by severe health impacts ranging from acute toxicity to long-term chronic organ damage. In the Indian context, the Food Safety and Standards Authority of India (FSSAI) has repeatedly flagged widespread non-compliance in food samples tested across various states, highlighting an urgent, critical need for more efficient, widespread, and scalable detection solutions.
+1.2 Problem Statement
+Modern food supply chains are vast, complex, and highly decentralized. Conventional methods for detecting food adulteration—such as High-Performance Liquid Chromatography (HPLC), Gas Chromatography–Mass Spectrometry (GC-MS), and Enzyme-Linked Immunosorbent Assays (ELISA)—offer extremely high specificity, but they are encumbered by severe operational bottlenecks. These techniques demand long turnaround times, incur substantial recurring costs for reagents, require highly specialized and fragile laboratory equipment, and necessitate operation by extensively trained analytical chemists. These constraints make it virtually impossible to deploy such testing at every node of the supply chain. Consequently, the lag between sampling and obtaining results often means that adulterated products have already reached the consumer market before a recall can be initiated. There is, therefore, a pressing need for an alternative approach that is rapid, cost-effective, and accessible to a broader range of stakeholders.
+1.3 Proposed Solution
+This project proposes the adoption of machine learning (ML) techniques to predict food adulteration based solely on easily measurable, macro-level physicochemical properties of food samples. Machine learning has demonstrated considerable promise in similar classification tasks across various scientific domains due to its intrinsic ability to identify subtle, multidimensional correlations within noisy data. By training supervised learning models on comprehensively labelled datasets of both adulterated and unadulterated samples, the project aims to construct a robust classification system. This system is envisioned to serve as a rapid preliminary screening tool that can instantly flag suspicious batches, complementing traditional laboratory analyses rather than entirely replacing them.
+1.4 Scope of the Project
+The scope of this proposal is concentrated on defining the underlying methodology and selecting the most appropriate machine learning classifiers for a binary classification task (determining whether a sample is adulterated or unadulterated). The actual dataset collection, rigorous model training, hyperparameter optimization, and extensive performance evaluation will be executed and documented in the subsequent stages of the project timeline. Furthermore, while the project aims to produce highly accurate predictive models, it does not currently cover the end-to-end software engineering required to deploy the system as a consumer-facing production application.
+1.5 Organization of the Report
+The remainder of this report is organized to logically guide the reader through the proposed research framework. Chapter 2 discusses general approaches in the field, highlighting the shift from traditional chemistry to computational modeling. Chapter 3 explicitly states the specific, measurable objectives of the project. Chapter 4 extensively details the proposed methodology, including the overarching system architecture, planned algorithms, evaluation metrics, and the projected timeline. Finally, Chapter 5 discusses the expected outcomes, potential societal impacts, and concludes the proposal.
+CHAPTER 2
+LITERATURE REVIEW
+2.1 Introduction
+To establish a robust theoretical foundation for this project, a comprehensive review of general methodologies surrounding food adulteration detection was conducted. This chapter discusses the historical reliance on conventional detection mechanisms, the inherent limitations of these methods in modern supply chains, and the strong rationale for transitioning towards data-driven, machine learning–based approaches for quality control.
+2.2 Traditional Detection Methods and Their Limitations
+Historically, the detection of food adulterants has relied heavily on chemical, physical, and immunological techniques. Chemical methods, notably HPLC and GC-MS, are universally regarded as the gold standard, providing precise, unambiguous identification of adulterants at the molecular level. Physical methods measure macroscopic properties, while immunological approaches leverage antigen-antibody interactions for high target specificity. However, while these conventional laboratory methods excel in accuracy, they are consistently limited by their prohibitive operational requirements. They typically require expensive consumable reagents, controlled laboratory environments, and destructive sample preparation protocols. Most significantly, the time required to process a single sample precludes their use in high-throughput, real-time screening scenarios. These logistical and financial bottlenecks have increasingly motivated the food science community to explore faster, computational alternatives.
+2.3 Emergence of Machine Learning in Food Science
+In recent years, the application of machine learning within food science and agricultural technology has expanded substantially. Supervised learning algorithms are now increasingly applied to complex tasks such as food origin classification, dynamic shelf-life prediction, and automated quality grading. Rather than relying purely on manual chemical analysis to isolate a specific marker compound, modern computational approaches attempt to leverage algorithms to learn the holistic "fingerprint" of a pure food product. Machine learning models, particularly ensemble methods like Random Forest and Gradient Boosting, are exceptionally well-suited for this paradigm because they are capable of detecting complex, non-linear relationships across multiple variables that might appear entirely normal when viewed in isolation through simple statistical tests.
+2.4 Identified Research Opportunity and Democratization of Testing
+A key observation from studying general trends in this computational transition is that many advanced ML methods still rely heavily on highly expensive spectroscopic data collection (such as Near-Infrared or Hyperspectral imaging cameras). While effective, this simply shifts the cost bottleneck from chemical reagents to expensive optical hardware. However, a highly practical and universally accessible alternative exists: utilizing fundamental physicochemical properties—such as pH, specific density, kinematic viscosity, and refractive index. These parameters can be gathered rapidly using standard, low-cost laboratory equipment available even in rural testing centers. This project aims to capitalize on this specific opportunity by building and evaluating ML classifiers exclusively on these accessible parameters. By doing so, the project intends to make adulteration prediction radically more practical and affordable for smaller-scale facilities, cooperatives, and local regulatory bodies, thereby democratizing food safety.
+2.5 Proposed Empirical Focus
+Rather than relying solely on abstract models or existing quantitative comparisons found in literature, the primary focus of this project will be on generating actual, empirical results. Multiple algorithms will be rigorously tested against the acquired datasets. Through iterative training, cross-validation, and hyperparameter tuning, the definitive accuracy metrics for this specific physicochemical approach will be established, documented, and reported.
+CHAPTER 3
+OBJECTIVES
+To ensure the project remains focused and its outcomes remain measurable, the following specific objectives have been defined:
+1. To systematically identify, curate, and format a suitable dataset comprising relevant physicochemical properties of various food samples, ensuring representation of both adulterated and entirely unadulterated instances.
+2. To thoroughly preprocess the acquired dataset by performing essential data cleaning routines, handling missing values via robust imputation, detecting and mitigating extreme outliers, and applying feature scaling to prepare the data optimally for machine learning ingestion.
+3. To implement and configure five distinct supervised machine learning classifiers—namely Random Forest, Support Vector Machine (SVM), k-Nearest Neighbours (k-NN), Decision Tree, and Gradient Boosting—designed specifically for binary classification tasks.
+4. To aggressively apply advanced feature engineering and selection techniques (such as correlation analysis and recursive feature elimination) to identify which specific physicochemical attributes are the most highly indicative of fraudulent adulteration.
+5. To objectively evaluate and benchmark all implemented models against one another using a standardized suite of performance metrics (including overall accuracy, precision, recall, F1-score, and AUC-ROC), and to present these actual empirical findings comprehensively in the final project report.
+6. To synthesize these findings and propose an overarching framework for a highly scalable, ML-based food adulteration prediction system that can operate reliably using only easily measurable, low-cost metrics.
+CHAPTER 4
+PROPOSED METHODOLOGY
+This chapter describes in detail the technical methodology that will be adopted for the implementation of the project. All steps described below represent the proposed structural plans and algorithmic strategies that will guide the subsequent execution phases of the research.
+4.1 Proposed System Architecture
+The proposed system will follow a rigorous, standard supervised machine learning pipeline. This sequential architecture ensures data integrity and model reliability. It consists of six primary stages: (1) Data Acquisition, (2) Data Preprocessing and Cleaning, (3) Feature Engineering and Selection, (4) Model Training and Optimization, (5) Model Evaluation, and (6) Final Prediction Generation.
+[Figure 4.1: Proposed System Architecture — Data Acquisition → Preprocessing → Feature Engineering → Model Training (RF, SVM, k-NN, DT, GB) → Evaluation]
+4.2 Data Acquisition Plan
+The foundational dataset will be sourced primarily from trusted, publicly available academic repositories such as the UCI Machine Learning Repository or Kaggle. Should existing public data prove insufficient in volume or variance, the team will supplement the dataset by generating synthetic data points based on established statistical distributions of food properties, or by utilizing institutional laboratory experiments. The absolute requirement is that the target dataset contains a statistically significant number of samples, with a well-represented balance of both adulterated and unadulterated labels to allow for reliable ML model training without severe class bias.
+4.3 Planned Data Preprocessing
+Raw data is rarely suitable for direct ingestion by machine learning algorithms. Therefore, the following preprocessing steps will be executed sequentially once the dataset is obtained:
+1. Missing Value Imputation: Median imputation will be preferred over mean imputation, as the median provides significantly better robustness against artificial skewing caused by extreme outliers in the raw measurements.
+2. Outlier Removal: The Interquartile Range (IQR) method will be applied to detect and mitigate extreme values. This prevents anomalous, highly irregular samples from disproportionately influencing the decision boundaries of the models.
+3. Feature Scaling: A StandardScaler will be applied to normalize all continuous features so they exhibit zero mean and unit variance. This step is critically important for distance-based algorithms like k-NN and SVM, which are highly sensitive to differing scales of measurement.
+4. Train-Test Split: The data will be partitioned into training (e.g., 80%) and testing (e.g., 20%) sets utilizing stratified random sampling. Stratification ensures that the original ratio of adulterated to unadulterated samples is perfectly preserved across both splits.
+4.4 Proposed Feature Set
+The following fundamental physicochemical features have been identified as highly relevant indicators of food purity. The exact, finalized feature set will be confirmed after the dataset is fully acquired and explored.
+Table 4.1: Proposed Feature Set and Data Types
+Feature
+Description
+Data Type
+pH
+Measure of the acidity or basicity of the sample
+Continuous
+Density
+Mass per unit volume (g/mL)
+Continuous
+Viscosity
+Internal resistance to flow or shear forces (cP)
+Continuous
+Refractive Index
+Measure of optical density and light bending
+Continuous
+Colour Index
+Standardized spectrophotometric colour value
+Continuous
+Moisture Content
+Percentage of water content by mass (%)
+Continuous
+Label
+Binary Target: Adulterated (1) / Unadulterated (0)
+Binary / Integer
+4.5 Planned Feature Engineering
+To maximize model efficiency and reduce the risk of overfitting, strict feature selection protocols will be enforced. Techniques such as Pearson Correlation Analysis will be used to identify highly correlated (redundant) feature pairs, mitigating multicollinearity issues. Additionally, Feature Importance extraction from ensemble tree-based models (like Random Forest) will be utilized to mathematically rank attributes by their actual predictive utility, allowing the system to discard uninformative variables.
+4.6 Machine Learning Algorithms to be Used
+The following algorithms have been selected for implementation and comparative analysis:
+4.6.1 Random Forest (RF): An advanced ensemble method that constructs a multitude of decision trees during training using bootstrapped data subsets. It outputs the mode of the classes for robust, variance-reduced predictions.
+4.6.2 Support Vector Machine (SVM): A highly effective maximum-margin classifier. Given the likelihood of non-linear boundaries in the data, the model will primarily utilize a Radial Basis Function (RBF) kernel to project data into higher dimensions.
+4.6.3 k-Nearest Neighbours (k-NN): A non-parametric, distance-based classifier that determines the class of a sample based on the majority vote of its 'k' closest neighbours in the feature space.
+4.6.4 Decision Tree (DT): A highly interpretable tree-based classifier that uses recursive binary splitting based on metrics like Gini impurity to partition the data space.
+4.6.5 Gradient Boosting (GB): A powerful sequential ensemble technique where each successive decision tree is explicitly designed to minimize the residual errors of the combined predecessor trees.
+Table 4.2: Planned Hyperparameter Tuning Strategy
+Model
+Key Hyperparameters
+Tuning Strategy
+Random Forest
+n_estimators, max_depth, min_samples_leaf
+Grid Search with CV
+SVM (RBF)
+C (regularization), γ (kernel width)
+Grid Search with CV
+k-NN
+k (number of neighbours), distance metric
+K-Fold Cross-validation
+Decision Tree
+max_depth, min_samples_split
+Grid Search with CV
+Gradient Boosting
+learning_rate, n_estimators
+Randomized Search with CV
+4.7 Planned Evaluation Approach
+Models will be rigorously evaluated using a comprehensive suite of standard classification metrics to ensure a holistic understanding of their performance:
+•  Accuracy: The overall proportion of totally correct predictions.
+•  Precision: The proportion of predicted adulterated samples that were actually adulterated (minimizing false alarms).
+•  Recall (Sensitivity): The proportion of actual adulterated samples that the model successfully caught (minimizing missed threats).
+•  F1-Score: The harmonic mean of precision and recall, providing a balanced metric for uneven datasets.
+•  AUC-ROC: The Area Under the Receiver Operating Characteristic curve, measuring the model's ability to separate the classes across various thresholds.
+4.8 Project Timeline
+Table 4.3: Proposed Project Timeline
+Stage
+Planned Activity
+Expected Deliverable
+Stage 1
+Extensive problem definition and methodology planning
+Comprehensive Project Synopsis / Proposal
+Stage 2
+Dataset acquisition, deep exploration, and preprocessing
+Fully cleaned, scaled dataset ready for ML ingestion
+Stage 3
+Algorithm implementation and hyperparameter tuning
+Optimized and trained ML classifiers
+Stage 4
+Rigorous evaluation, comparative analysis, and documentation
+Final metrics, visual graphs, and Complete Project Report
+CHAPTER 5
+EXPECTED OUTCOMES AND CONCLUSION
+5.1 Expected Outcomes
+Upon the successful execution of the proposed methodology, the following tangible outcomes are heavily anticipated:
+1. A meticulously preprocessed and structurally sound dataset of food samples, accurately mapped to their corresponding physicochemical features.
+2. Fully operational and trained implementations of the five proposed supervised machine learning classifiers.
+3. A detailed comparative analysis containing actual, empirical performance metrics (accuracy, precision, recall) evaluating the strengths and weaknesses of each tested model.
+4. The conclusive identification of the single most effective classifier algorithm suited for this specific problem domain.
+5. A ranked hierarchy of physicochemical features, explicitly detailing which lab tests provide the most value for detecting adulteration.
+5.2 Significance of the Proposed Work
+The implications of this proposed work extend far beyond a simple academic exercise. By successfully developing an ML-based analytical framework that relies entirely on fundamental, easily attainable physicochemical measurements, this project aims to drastically lower the barrier to entry for food safety testing. It seeks to make adulteration detection highly accessible and affordable for grassroots agricultural cooperatives, regional food processing units, and underfunded regulatory agencies, fundamentally avoiding the necessity for complex and expensive spectroscopic hardware.
+5.3 Limitations
+The current limitations of this proposed work must be acknowledged:
+•  At this stage, no empirical data has been generated; all algorithms, while theoretically sound, remain to be tested against our specific constraints.
+•  The ultimate validity and real-world applicability of the final results will depend strictly on the quality, diversity, and volume of the acquired dataset.
+•  The project strictly focuses on binary classification (is it adulterated or not?), and will not attempt to categorize the exact chemical nature of the adulterant used.
+5.4 Conclusion
+This document comprehensively outlines the structural blueprint for an ambitious project aimed at predicting food adulteration using applied machine learning. By defining a clear, step-by-step, and scientifically rigorous methodology—spanning from initial data acquisition and intelligent preprocessing through to advanced algorithm tuning and multifactorial evaluation—the project is now fully prepared to enter the execution stage. In the subsequent stages of this work, actual models will be trained on empirical data, and definitive, measurable results will be compiled to demonstrate the efficacy of this accessible approach to food safety.
+REFERENCES
+General Literature & Methodology
+[1] Hastie, T., Tibshirani, R., and Friedman, J., The Elements of Statistical Learning: Data Mining, Inference, and Prediction, Springer, 2nd Ed., ISBN 978-0387848570.
+[2] Géron, A., Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems, O'Reilly Media, 2nd Ed., ISBN 978-1492032649.
+[3] Bishop, C. M., Pattern Recognition and Machine Learning (Information Science and Statistics), Springer, ISBN 978-0387310732.
+Web Resources
+[4] Food Safety and Standards Authority of India (FSSAI) official regulatory portal and enforcement statistics (fssai.gov.in)
+[5] Scikit-learn foundational documentation — Supervised learning algorithms and mathematical formulations (scikit-learn.org)
+[6] UCI Machine Learning Repository — Public datasets for empirical research in machine learning (archive.ics.uci.edu)
+PROJECT DETAILS
+Student Details
+Field
+Details
+Student Name(s)
+Asmit Das, Suprathik Narendra, Nadia Cecil
+Registration Number(s)
+235891248, 235891216,235891048
+Section / Roll No
+Cyber-B/47, Cyber-B/41, Cyber-B/5
+Email Address(es)
+asmit1.mitblr2023@learner.manipal.edu,
+suprathik.mitblr2023@learner.manipal.edu,
+nadia.mitblr2023@learner.manipal.edu
+Phone No (M)
+8861589299, 9113880146, 8660630335
+Project Details
+Field
+Details
+Project Title
+Machine Learning for Predicting Food Adulteration
+Guide Details
+Field
+Details
+Faculty Name
+Dr. S. Vaishnavi
+Full contact address with pin code
+Manipal Institute of Technology, Bengaluru Campus Govindapura, Yelahanka, Bengaluru – 560064, Karnataka, India
+Email address
+s.vaishnavi@manipal.edu

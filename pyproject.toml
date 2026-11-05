@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "foodadult"
+version = "0.1.0"
+description = "Machine Learning for Predicting Food Adulteration using Physicochemical Properties"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Asmit Das, Suprathik Narendra, Nadia Cecil"}
+]
+dependencies = [
+    "numpy>=1.26.0",
+    "pandas>=2.2.0",
+    "scikit-learn>=1.4.0",
+    "scipy>=1.12.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "pyyaml>=6.0.1",
+    "joblib>=1.3.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

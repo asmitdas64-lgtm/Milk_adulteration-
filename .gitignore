@@ -1,0 +1,32 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints
+
+# ML artifacts & models
+models/*.joblib
+!models/.gitkeep
+
+# Data (keep raw safe and uncommitted if large, interim and processed re-generated)
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
