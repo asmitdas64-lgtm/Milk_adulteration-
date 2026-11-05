@@ -31,6 +31,7 @@
 17. [Why did we choose SVM over Random Forest, Decision Tree, or Logistic Regression?](#q17-why-svm)
 18. [What is our EXACT real-world accuracy and performance breakdown?](#q18-actual-accuracy-metrics)
 19. [What is a "Dummy Baseline" in Machine Learning? Why do we use it?](#q19-dummy-baseline)
+20. [How were the models compared, trained better, and tuned better? (Tournament & Hyperparameter Optimization)](#q20-model-comparison-and-tuning)
 
 ---
 
@@ -388,7 +389,53 @@ ACTUAL: Adulterated (1)       0 (FN - Toxic Missed!) 161 (TP - Caught!)
 
 ---
 
+<a id="q20-model-comparison-and-tuning"></a>
+### Q20: How were the models compared, trained better, and tuned better? (Tournament & Hyperparameter Optimization)
+
+#### 1. How the Models Were Compared Fairly (The Tournament Framework)
+To prevent bias, all 6 models were evaluated in a standardized arena using identical rules:
+- **Identical Split:** All models were trained on the exact same 847 training samples. The 212 test samples were locked away.
+- **Stratified 5-Fold Cross-Validation:** The training data was split into 5 equal subsets (folds). In each round, the model trained on 4 folds and tested on the 5th fold. Stratification ensured that every single fold had the exact same 75.8% / 24.2% class proportion.
+- **Multi-Metric Scorecard:** Instead of looking only at accuracy, models were ranked by:
+  1. **Recall (Sensitivity):** Priority #1 — catching all adulterated samples.
+  2. **$F_1$-Score:** Balance of precision and recall.
+  3. **ROC-AUC:** Diagnostic separation ability.
+  4. **Cross-Validation Standard Deviation ($\sigma$):** Ensuring low variance across folds.
+
+#### 2. How They Were Trained Better (The Preprocessing Pipeline)
+Raw models often struggle with sensor data. We trained them inside an automated Scikit-Learn `Pipeline` that standardized the training process:
+- **Median Imputation (`SimpleImputer`):** Robust against missing readings without being skewed by extreme numbers.
+- **Outlier Winsorization (`IQRClipper`):** Clipped extreme spikes ($[Q_1 - 1.5\text{IQR}, Q_3 + 1.5\text{IQR}]$) so that algorithms relying on distance calculations (like SVM and KNN) wouldn't suffer from gradient explosions or distorted decision margins.
+- **Feature Standardization (`StandardScaler`):** Features in our dataset have vastly different scales:
+  - $\text{Colour} \in [240, 255]$
+  - $\text{Temperature} \in [34, 90]$
+  - $\text{pH} \in [3.0, 9.5]$
+  - $\text{Binary Flags} \in [0, 1]$
+  Without scaling, distance-based algorithms would be 95% influenced by Colour and ignore pH! `StandardScaler` converted every feature to mean 0 and standard deviation 1:
+  $$z = \frac{x - \mu}{\sigma}$$
+  This gave all 7 sensors equal mathematical weight during training.
+
+#### 3. How They Were Tuned Better (Hyperparameter Optimization)
+- **What is Hyperparameter Tuning?**  
+  Model *parameters* (like weights) are learned automatically from data. But *hyperparameters* are the external "control dials" that human engineers must configure before training starts.
+- **Our Search Strategy:**  
+  We used systematic grid and randomized search (`GridSearchCV` / `RandomizedSearchCV`) with stratified 5-fold cross-validation.
+- **Tuning Dials for Each Model:**
+  - **Support Vector Machine (SVM):**
+    - *Kernel:* Tested `linear` vs `rbf`. (RBF won because pure milk has a curved, non-linear boundary).
+    - *Regularization parameter $C \in [0.1, 1.0, 10.0, 100.0]$:* $C=100.0$ was selected. A high $C$ heavily penalizes any misclassification on the training set, pushing the margin to eliminate false negatives.
+    - *Kernel bandwidth $\gamma \in [\text{'scale'}, \text{'auto'}, 0.01, 0.1]$:* $\gamma=\text{'scale'}$ automatically adjusted the Gaussian influence radius based on feature variance.
+  - **Random Forest:**
+    - Tuned `n_estimators` ($100 \rightarrow 300$), `max_depth` (controlling tree depth to prevent leaf-node memorization), and `min_samples_split`.
+  - **Gradient Boosting:**
+    - Tuned `learning_rate` ($0.01 \rightarrow 0.2$), `n_estimators`, and `subsample` ratio.
+- **Scoring Function for Tuning:**  
+  All grid searches used `scoring='f1'` and checked `recall`, ensuring the algorithms prioritized safety over raw accuracy.
+
+---
+
 *This document is continuously updated with every new question asked during project sessions.*
+
 
 
 
