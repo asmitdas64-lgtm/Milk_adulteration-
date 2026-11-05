@@ -18,6 +18,7 @@ from foodadult.models.train import evaluate_baseline_models, tune_all_models
 from foodadult.evaluation.evaluate import evaluate_models
 from foodadult.evaluation.interpret import run_interpretability_analysis
 from foodadult.evaluation.ablation import run_all_ablations
+from foodadult.predict import predict_csv
 
 
 def parse_args():
@@ -314,6 +315,26 @@ def execute_ablate(config_path: str, model_name: Optional[str] = None):
     print(f"- Methodology Defense:  {reports_dir}/metrics/ablations_summary.md")
 
 
+def execute_predict(model_path: str, in_csv: str, out_csv: str):
+    print(f"\n[INFO] Loading trained model from: {model_path}")
+    print(f"[INFO] Predicting on samples from: {in_csv}")
+    res_df = predict_csv(model_path, in_csv, out_csv)
+
+    n_samples = len(res_df)
+    n_pure = int((res_df["prediction"] == 0).sum())
+    n_adult = int((res_df["prediction"] == 1).sum())
+
+    print(f"\n[SUCCESS] Prediction completed for {n_samples} samples!")
+    print("=" * 60)
+    print(f"- Pure Samples:        {n_pure} ({n_pure/n_samples:.1%})")
+    print(f"- Adulterated Samples: {n_adult} ({n_adult/n_samples:.1%})")
+    print(f"- Predictions saved:   {out_csv}")
+    print("=" * 60)
+    print("\nPreview of Predictions (first 5 samples):")
+    preview_cols = [c for c in ["ph", "temprature", "prediction", "predicted_label", "probability_adulterated", "confidence"] if c in res_df.columns]
+    print(res_df[preview_cols].head(5).to_string(index=False))
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -336,6 +357,8 @@ def main():
         execute_interpret(args.config)
     elif args.command == "ablate":
         execute_ablate(args.config, args.model)
+    elif args.command == "predict":
+        execute_predict(args.model, args.input, args.output)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

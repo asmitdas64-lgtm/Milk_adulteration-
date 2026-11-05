@@ -1,7 +1,7 @@
 # PROGRESS.md — Session Log
 
-**Current phase:** Phase 10 — Prediction Interface
-**Blocking open decisions:** none (D-11: Streamlit demo default is NO per report §1.4, CLI predict is standard)
+**Current phase:** Phase 11 — Results & Documentation
+**Blocking open decisions:** none
 
 ---
 
@@ -163,3 +163,17 @@
   - Saved artifacts: `reports/metrics/ablations.csv` and `reports/metrics/ablations_summary.md`.
 - Tests: 42 passed in 51.52s (`pytest -q`).
 - Next step: Phase 10 — Prediction Interface.
+
+### 2026-11-05 — Session 11 — Phase 10 Completed
+- Done:
+  - Wrote Phase 10 tests first (`tests/test_predict.py`).
+  - Implemented `src/foodadult/predict.py`:
+    - Strict schema verification: column naming, case-insensitivity, whitespace trimming, and missing column detection.
+    - Physical plausibility checks: limits values to real physical ranges (e.g. pH in [0, 14], temperature in [0, 100°C]).
+    - Model inference with class probabilities and confidence scores.
+  - Wired `cli.py predict` subcommand (`--model`, `--input`, `--output`).
+  - Created test fixture and showcase samples: `docs/example_input.csv`.
+  - Executed CLI prediction tool: `python -m foodadult.cli predict --model models/best_model.joblib --input docs/example_input.csv --output reports/example_predictions.csv`.
+  - Confirmed accurate classification: Pure milk samples detected with 98.2%–99.9% confidence; sour/acidified, neutralizer-doped, and diluted adulterated samples flagged with 97.3%–100% confidence.
+- Tests: 45 passed in 52.88s (`pytest -q`).
+- Next step: Phase 11 — Results & Documentation (`reports/RESULTS.md` auto-generation, report draft).

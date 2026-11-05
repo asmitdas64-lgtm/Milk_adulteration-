@@ -107,11 +107,11 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P9.5 `ablations.csv` + `ablations_summary.md` generated and reviewed
 
 ## Phase 10 — Prediction Interface
-- [ ] P10.0 🔴 Tests first: test_predict.py (schema error, save/load identical)
-- [ ] P10.1 `predict.py` with input schema validation
-- [ ] P10.2 `cli predict` command
-- [ ] P10.3 `docs/example_input.csv` + `test_predict.py`
-- [ ] P10.4 (Only if D-11 = yes) Streamlit demo
+- [x] P10.0 🔴 Tests first: test_predict.py (schema error, out of physical range, prediction outputs)
+- [x] P10.1 `predict.py` with input schema validation & probability outputs
+- [x] P10.2 `cli predict` command (`--model`, `--input`, `--output`)
+- [x] P10.3 `docs/example_input.csv` + `test_predict.py` passing
+- [x] P10.4 D-11 confirmed: Streamlit out-of-scope per report §1.4, robust CLI tool provided
 
 ## Phase 11 — Results & Documentation
 - [ ] P11.0 🔴 Tests first: test_report.py (RESULTS.md numbers == metric JSON)

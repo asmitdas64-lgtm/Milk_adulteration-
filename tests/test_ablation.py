@@ -105,3 +105,4 @@ def test_run_all_ablations_produces_table_and_markdown(ablation_env):
     reports_dir = Path(cfg["paths"]["reports_dir"])
     assert (reports_dir / "metrics" / "ablations.csv").exists()
     assert (reports_dir / "metrics" / "ablations_summary.md").exists()
+

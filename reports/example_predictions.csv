@@ -1,0 +1,6 @@
+ph,temprature,taste,odor,fat,turbidity,colour,prediction,predicted_label,probability_adulterated,confidence
+6.6,35,1,0,1,0,254,0,Pure,0.018,0.982
+6.7,37,1,0,1,1,255,0,Pure,0.0003,0.9997
+4.5,40,0,1,0,1,245,1,Adulterated,1.0,1.0
+8.5,45,0,1,1,1,248,1,Adulterated,0.9728,0.9728
+6.8,45,0,0,0,0,240,1,Adulterated,1.0,1.0
