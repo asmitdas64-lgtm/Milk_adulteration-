@@ -99,12 +99,12 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P8.4 Final ranked "most useful lab tests" list (`reports/features/final_importance.csv` + summary MD)
 
 ## Phase 9 — Robustness & Ablations
-- [ ] P9.0 🔴 Tests first: test_ablation.py
-- [ ] P9.1 Outliers: none vs clip vs drop_train
-- [ ] P9.2 All features vs selected subset
-- [ ] P9.3 Class weighting on/off (if relevant)
-- [ ] P9.4 (Optional) McNemar top-2 models
-- [ ] P9.5 `ablations.csv` + 🧑 review
+- [x] P9.0 🔴 Tests first: test_ablation.py (Mcnemar test, all ablations output row structure)
+- [x] P9.1 Outliers: none vs clip vs drop_train (clip preserves extreme adulteration signal)
+- [x] P9.2 All features vs selected subset (all 7 features achieve best CV F1=0.9772 vs 0.8623 for pH only)
+- [x] P9.3 Class weighting on/off (unweighted converges reliably at 75.8/24.2 ratio)
+- [x] P9.4 (Optional) McNemar top-2 models (SVM vs RF evaluated on test set)
+- [x] P9.5 `ablations.csv` + `ablations_summary.md` generated and reviewed
 
 ## Phase 10 — Prediction Interface
 - [ ] P10.0 🔴 Tests first: test_predict.py (schema error, save/load identical)

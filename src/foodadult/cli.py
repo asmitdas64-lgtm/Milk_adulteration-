@@ -17,6 +17,7 @@ from foodadult.logging_utils import create_run_directory, setup_logger
 from foodadult.models.train import evaluate_baseline_models, tune_all_models
 from foodadult.evaluation.evaluate import evaluate_models
 from foodadult.evaluation.interpret import run_interpretability_analysis
+from foodadult.evaluation.ablation import run_all_ablations
 
 
 def parse_args():
@@ -54,6 +55,11 @@ def parse_args():
     # Command: interpret
     cmd_interp = subparsers.add_parser("interpret", help="Run interpretability & feature importance analysis")
     cmd_interp.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
+
+    # Command: ablate
+    cmd_ablate = subparsers.add_parser("ablate", help="Run robustness & ablation studies")
+    cmd_ablate.add_argument("--config", default="configs/default.yaml", help="Path to config YAML")
+    cmd_ablate.add_argument("--model", default=None, help="Model to ablate (defaults to best model)")
 
     # Command: predict
     cmd_pred = subparsers.add_parser("predict", help="Predict adulteration on new samples CSV")
@@ -288,6 +294,26 @@ def execute_interpret(config_path: str):
     print(f"                            {reports_dir}/figures/tree_interpretability.png")
 
 
+def execute_ablate(config_path: str, model_name: Optional[str] = None):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting Phase 9 Robustness & Ablation Studies...")
+    df = run_all_ablations(cfg, model_name=model_name)
+
+    logger.info("Ablation studies complete.")
+    logger.info(f"Artifacts saved to {reports_dir}/metrics/ablations.csv and ablations_summary.md")
+
+    print("\n[SUCCESS] Robustness & Ablation Studies Complete (Phase 9)!")
+    print("=" * 95)
+    cols_to_print = ["ablation_type", "setting", "cv_f1_mean", "cv_accuracy_mean", "cv_recall_mean"]
+    print(df[cols_to_print].to_string(index=False))
+    print("=" * 95)
+    print(f"\n- Ablation Metrics CSV: {reports_dir}/metrics/ablations.csv")
+    print(f"- Methodology Defense:  {reports_dir}/metrics/ablations_summary.md")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -308,6 +334,8 @@ def main():
         execute_evaluate(args.config)
     elif args.command == "interpret":
         execute_interpret(args.config)
+    elif args.command == "ablate":
+        execute_ablate(args.config, args.model)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

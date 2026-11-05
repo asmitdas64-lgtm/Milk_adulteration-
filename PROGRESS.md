@@ -1,7 +1,7 @@
 # PROGRESS.md — Session Log
 
-**Current phase:** Phase 9 — Robustness & Ablations
-**Blocking open decisions:** none (D-11 is for Phase 10)
+**Current phase:** Phase 10 — Prediction Interface
+**Blocking open decisions:** none (D-11: Streamlit demo default is NO per report §1.4, CLI predict is standard)
 
 ---
 
@@ -149,3 +149,17 @@
   - Saved artifacts: `reports/features/final_importance.csv`, `reports/features/interpretability_summary.md`, `reports/figures/interpret_perm_importance.png`, and `reports/figures/tree_interpretability.png`.
 - Tests: 39 passed in 49.33s (`pytest -q`).
 - Next step: Phase 9 — Robustness & Ablations.
+
+### 2026-11-05 — Session 10 — Phase 9 Completed
+- Done:
+  - Wrote Phase 9 tests first (`tests/test_ablation.py`).
+  - Implemented `src/foodadult/evaluation/ablation.py` running 3 ablation experiments and McNemar's test:
+    1. Outlier Treatment: Clipping vs None vs Row Deletion.
+    2. Feature Subsets: All 7 features vs Top 3 vs Top 2 vs pH only.
+    3. Class Weighting: None vs Balanced.
+    4. McNemar significance test between SVM and Random Forest on test predictions.
+  - Wired `cli.py ablate` subcommand.
+  - Executed CLI `python -m foodadult.cli ablate`.
+  - Saved artifacts: `reports/metrics/ablations.csv` and `reports/metrics/ablations_summary.md`.
+- Tests: 42 passed in 51.52s (`pytest -q`).
+- Next step: Phase 10 — Prediction Interface.

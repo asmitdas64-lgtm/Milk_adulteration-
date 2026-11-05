@@ -114,3 +114,4 @@ def test_run_interpretability_pipeline(interpret_env):
     assert (reports_dir / "figures" / "interpret_perm_importance.png").exists()
     assert (reports_dir / "figures" / "tree_interpretability.png").exists()
     assert "ranking" in results
+
