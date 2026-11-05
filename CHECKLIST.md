@@ -50,12 +50,12 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P2.8 🧑 Imbalance decision D-07 confirmed (minority = 24.17% >= 20%; standard stratified CV confirmed)
 
 ## Phase 3 — Split & Preprocessing Pipeline
-- [ ] P3.0 🔴 Tests first: test_split.py, test_transformers.py, test_preprocess.py, test_leakage.py
-- [ ] P3.1 `split.py`: stratified 80/20, seed 42, `split.json` saved
-- [ ] P3.2 `IQRClipper` transformer + tests
-- [ ] P3.3 `build_preprocessor` (median → IQR clip → StandardScaler) in ColumnTransformer
-- [ ] P3.4 Leakage test (`tests/test_leakage.py`) passes
-- [ ] P3.5 Stratification test: class ratio train ≈ test (±1 %)
+- [x] P3.0 🔴 Tests first: test_split.py, test_transformers.py, test_preprocess.py, test_leakage.py
+- [x] P3.1 `split.py`: stratified 80/20, seed 42, `split.json` saved
+- [x] P3.2 `IQRClipper` transformer + tests
+- [x] P3.3 `build_preprocessor` (median → IQR clip → StandardScaler) in ColumnTransformer
+- [x] P3.4 Leakage test (`tests/test_leakage.py`) passes
+- [x] P3.5 Stratification test: class ratio train ≈ test (±1 %) (actual: 75.80% vs 75.94%, diff=0.14%)
 
 ## Phase 4 — Feature Engineering & Selection
 - [ ] P4.0 🔴 Tests first: test_selection.py

@@ -58,3 +58,4 @@ def test_run_eda_creates_artifacts(tmp_path, sample_clean_df):
     fig_dir = reports_dir / "figures"
     assert (fig_dir / "eda_class_balance.png").is_file()
     assert (fig_dir / "eda_correlation_matrix.png").is_file()
+

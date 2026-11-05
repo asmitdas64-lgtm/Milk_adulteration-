@@ -7,6 +7,7 @@ import pandas as pd
 
 from foodadult.config import load_config
 from foodadult.data.load import load_raw, standardize_columns, make_binary_label
+from foodadult.data.split import perform_stratified_split
 from foodadult.data.validate import validate_dataframe
 from foodadult.eda import run_eda
 from foodadult.logging_utils import create_run_directory, setup_logger
@@ -127,6 +128,25 @@ def execute_eda(config_path: str):
     print(f"- Figures: {reports_dir}/figures/ (class balance, distributions, correlation matrix)")
 
 
+def execute_split(config_path: str):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info("Starting Stratified Train/Test Partitioning...")
+    train_df, test_df, split_info = perform_stratified_split(cfg)
+
+    logger.info(f"Partitioning complete. Train samples: {len(train_df)}, Test samples: {len(test_df)}")
+    logger.info(f"Train class balance: {split_info['train_class_balance']}")
+    logger.info(f"Test class balance: {split_info['test_class_balance']}")
+    logger.info(f"Saved artifacts to {cfg['paths']['processed_dir']}/train.csv, test.csv, split.json")
+
+    print(f"\n[SUCCESS] Stratified Train/Test split complete!")
+    print(f"- Train set: {len(train_df)} samples ({split_info['train_class_balance']})")
+    print(f"- Test set:  {len(test_df)} samples ({split_info['test_class_balance']}) [LOCKED]")
+    print(f"- Saved to:  {cfg['paths']['processed_dir']}/")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -137,6 +157,8 @@ def main():
         run_validate(args.config)
     elif args.command == "eda":
         execute_eda(args.config)
+    elif args.command == "split":
+        execute_split(args.config)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 

@@ -39,3 +39,15 @@
   - Executed `python -m foodadult.cli validate` on raw `data/raw/milknew.csv`. Cleaned interim dataset successfully generated at `data/interim/clean.csv` (1,059 rows; 803 adulterated/substandard, 256 pure).
 - Tests: 10 passed in 2.30s (`pytest -v`).
 - Next step: Phase 2 — Exploratory Data Analysis (EDA) & Data Card generation.
+
+### 2026-11-05 — Session 3 — Phase 2 Completed
+- Done:
+  - Wrote Phase 2 tests first (`tests/test_eda.py`).
+  - Implemented `src/foodadult/eda.py` computing summary statistics, class balances, and IQR outliers per feature.
+  - Generated visualization figures: `reports/figures/eda_class_balance.png`, `reports/figures/eda_correlation_matrix.png`, and `reports/figures/eda_distributions.png`.
+  - Generated complete Data Card: `reports/eda/data_card.md` and numerical snapshot `reports/eda/summary.json`.
+  - Created interactive narrative notebook: `notebooks/01_eda.ipynb`.
+  - Wired `cli.py eda` subcommand.
+  - Confirmed D-07: minority class is 24.17% (pure milk samples), so standard stratified 5-fold cross-validation is robust.
+- Tests: 12 passed in 14.25s (`pytest -v`).
+- Next step: Phase 3 — Splitting & Leak-free Preprocessing Pipeline.
