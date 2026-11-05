@@ -26,17 +26,17 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P0.7 `config.py` + `logging_utils.py` (run dir + config snapshot)
 - [x] P0.8 `cli.py` with stub subcommands; `python -m foodadult.cli --help` works
 - [x] P0.9 Smoke test; `pytest -q` green
-- [ ] P0.10 `README.md`, `git init`, first commit
+- [x] P0.10 `README.md`, `git init`, first commit
 
 ## Phase 1 — Dataset Acquisition & Validation 🧑
-- [ ] P1.0 🔴 Tests first: test_load.py, test_validate.py (see 10_TDD §5)
-- [ ] P1.1 Raw file placed in `data/raw/` (by human); path set in config
-- [ ] P1.2 Actual columns/dtypes inspected and printed (no assumptions)
-- [ ] P1.3 `column_rename`, `features`, `ranges` filled in config
-- [ ] P1.4 `load.py` incl. `make_binary_label` (per D-04) + tests
-- [ ] P1.5 `validate.py` (schema, dtypes, ranges, label set, duplicates) + tests
-- [ ] P1.6 `cli validate` writes `data/interim/clean.csv`
-- [ ] P1.7 🧑 Human confirms columns + label mapping
+- [x] P1.0 🔴 Tests first: test_load.py, test_validate.py (see 10_TDD §5)
+- [x] P1.1 Raw file placed in `data/raw/` (by human); path set in config
+- [x] P1.2 Actual columns/dtypes inspected and printed (no assumptions)
+- [x] P1.3 `column_rename`, `features`, `ranges` filled in config
+- [x] P1.4 `load.py` incl. `make_binary_label` (per D-04) + tests
+- [x] P1.5 `validate.py` (schema, dtypes, ranges, label set, duplicates) + tests
+- [x] P1.6 `cli validate` writes `data/interim/clean.csv`
+- [x] P1.7 🧑 Human confirms columns + label mapping
 
 ## Phase 2 — EDA
 - [ ] P2.0 🔴 Tests first: test_eda.py
