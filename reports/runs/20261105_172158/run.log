@@ -1,0 +1,7 @@
+[2026-11-05 17:21:58] [INFO] [run_20261105_172158]: Starting Baseline Models 5-Fold Stratified Cross-Validation on Train Set...
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: DummyClassifier baseline F1: 0.8623
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: Model 'rf': CV F1 = 0.9984 (beats dummy: True)
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: Model 'svm': CV F1 = 0.9772 (beats dummy: True)
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: Model 'knn': CV F1 = 0.9977 (beats dummy: True)
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: Model 'dt': CV F1 = 0.9969 (beats dummy: True)
+[2026-11-05 17:22:21] [INFO] [run_20261105_172158]: Model 'gb': CV F1 = 0.9984 (beats dummy: True)

@@ -62,3 +62,21 @@
   - Executed CLI `python -m foodadult.cli split`. Artifacts generated in `data/processed/`: `train.csv` (847 samples), `test.csv` (212 samples), and `split.json`. Train/test class proportions match within 0.14%.
 - Tests: 17 passed in 14.93s (`pytest -v`).
 - Next step: Phase 4 — Feature Engineering & Selection (Objective 4 of report).
+
+### 2026-11-05 — Session 5 — Phase 4 Completed
+- Done:
+  - Wrote Phase 4 tests first (`tests/test_selection.py`).
+  - Implemented `src/foodadult/features/selection.py` calculating Pearson collinearity pairs, Random Forest impurity importance, Permutation importance (F1 metric), and RFECV with Stratified 5-Fold Cross-Validation.
+  - Executed CLI `python -m foodadult.cli select-features`.
+  - Identified feature importance hierarchy on training data:
+    1. `ph`: 0.392
+    2. `temprature`: 0.180
+    3. `fat`: 0.144
+    4. `odor`: 0.123
+    5. `colour`: 0.066
+    6. `turbidity`: 0.048
+    7. `taste`: 0.045
+  - RFECV confirmed that all 7 parameters contribute positively to predictive F1 score. Retained all 7 features per D-09.
+  - Saved artifacts: `reports/features/feature_ranking.csv`, `reports/features/selected_features.json`, and `reports/figures/feat_importance.png`.
+- Tests: 21 passed in 33.74s (`pytest -v`).
+- Next step: Phase 5 — Baseline Models.

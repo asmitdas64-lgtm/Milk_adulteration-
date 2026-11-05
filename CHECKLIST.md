@@ -67,11 +67,11 @@ Phases are strictly sequential — see `context/06_PHASES.md`.
 - [x] P4.6 All-features vs subset CV comparison; D-09 applied (all 7 features retained)
 
 ## Phase 5 — Baseline Models
-- [ ] P5.0 🔴 Tests first: test_registry.py, test_train.py (beats dummy on easy fixture)
-- [ ] P5.1 `registry.py` builds Dummy + RF, SVM, k-NN, DT, GB (+ test)
-- [ ] P5.2 Default-param 5-fold CV for all models
-- [ ] P5.3 `baseline_cv.json/.csv` saved
-- [ ] P5.4 All 5 models beat Dummy on CV F1 (else investigate)
+- [x] P5.0 🔴 Tests first: test_registry.py, test_train.py (beats dummy on easy fixture)
+- [x] P5.1 `registry.py` builds Dummy + RF, SVM, k-NN, DT, GB (+ test)
+- [x] P5.2 Default-param 5-fold CV for all models on training set
+- [x] P5.3 `baseline_cv.json/.csv` saved
+- [x] P5.4 All 5 models beat Dummy on CV F1 (Dummy: 0.8623, Models: 0.9631 - 0.9984)
 
 ## Phase 6 — Hyper-parameter Tuning
 - [ ] P6.0 🔴 Tests first: tuning tests in test_train.py (params within grid, reproducible)

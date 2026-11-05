@@ -81,3 +81,4 @@ def test_feature_selection_pipeline_writes_artifacts(tmp_path, mock_train_data):
     assert (reports_dir / "features" / "feature_ranking.csv").is_file()
     assert (reports_dir / "features" / "selected_features.json").is_file()
     assert (reports_dir / "figures" / "feat_importance.png").is_file()
+

@@ -3,6 +3,7 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 import pandas as pd
 
 from foodadult.config import load_config
@@ -12,6 +13,7 @@ from foodadult.data.validate import validate_dataframe
 from foodadult.eda import run_eda
 from foodadult.features.selection import run_feature_selection_pipeline
 from foodadult.logging_utils import create_run_directory, setup_logger
+from foodadult.models.train import evaluate_baseline_models
 
 
 def parse_args():
@@ -172,6 +174,35 @@ def execute_select_features(config_path: str):
     print(f"- Artifacts saved to: {reports_dir}/features/ and {reports_dir}/figures/feat_importance.png")
 
 
+def execute_train_baseline(config_path: str, models: Optional[list]):
+    cfg = load_config(config_path)
+    reports_dir = Path(cfg["paths"]["reports_dir"])
+    run_dir, logger = create_run_directory(reports_dir, cfg)
+
+    logger.info(f"Starting Baseline Models 5-Fold Stratified Cross-Validation on Train Set...")
+    results = evaluate_baseline_models(cfg, model_keys=models)
+
+    metrics_csv = reports_dir / "metrics" / "baseline_cv.csv"
+    summary_df = pd.read_csv(metrics_csv)
+
+    dummy_f1 = results["dummy"]["f1_mean"]
+    logger.info(f"DummyClassifier baseline F1: {dummy_f1:.4f}")
+    all_beat_dummy = True
+    for m in [k for k in results.keys() if k != "dummy"]:
+        m_f1 = results[m]["f1_mean"]
+        beats = m_f1 > dummy_f1
+        if not beats:
+            all_beat_dummy = False
+        logger.info(f"Model '{m}': CV F1 = {m_f1:.4f} (beats dummy: {beats})")
+
+    print(f"\n[SUCCESS] Baseline Models Evaluation Complete!")
+    print("=" * 70)
+    print(summary_df[["model", "f1_mean", "accuracy_mean", "recall_mean", "precision_mean", "roc_auc_mean"]].to_string(index=False))
+    print("=" * 70)
+    print(f"All real models beat dummy baseline: {'YES' if all_beat_dummy else 'NO'}")
+    print(f"Artifacts saved to: {reports_dir}/metrics/baseline_cv.csv and baseline_cv.json")
+
+
 def main():
     args = parse_args()
     if args.command is None:
@@ -186,6 +217,8 @@ def main():
         execute_split(args.config)
     elif args.command == "select-features":
         execute_select_features(args.config)
+    elif args.command == "train":
+        execute_train_baseline(args.config, args.models)
     else:
         print(f"Command '{args.command}' is not yet implemented or scheduled in upcoming phase.")
 
