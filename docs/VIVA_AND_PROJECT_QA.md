@@ -36,6 +36,7 @@
 22. [What is Cross-Validation? How does Stratified 5-Fold Cross-Validation work?](#q22-cross-validation-explained)
 23. [Were extreme values replaced by the median? (Important: Outlier Winsorization vs. Imputation)](#q23-outliers-vs-median)
 24. [What about missing values? How does the pipeline handle them?](#q24-missing-values-pipeline)
+25. [Final Presentation Speaker Notes: Fact-Check & Verification](#q25-speaker-notes-verification)
 
 ---
 
@@ -529,7 +530,31 @@ We separated the problem into two distinct stages:
 
 ---
 
+<a id="q25-speaker-notes-verification"></a>
+### Q25: Final Presentation Speaker Notes: Fact-Check & Verification
+
+The project presentation speaker notes (Slides 1–11) were audited line-by-line against the codebase, test suite, and experimental outputs.
+
+#### Verification Summary Table:
+
+| Slide # & Topic | Claim in Notes | Project Verification Status | Notes / Adjustments |
+|:---|:---|:---:|:---|
+| **Slide 1: Title** | B.Tech Minor Project, Dept of CSE, MIT Bengaluru. Guide: Dr. S. Vaishnavi. | **MATCH (100%)** | *Check:* If team member Suprathik Narendra is also presenting, ensure he is introduced alongside Asmit Das and Nadia Cecil. |
+| **Slide 2: Contents** | Problem $\rightarrow$ Lit Review $\rightarrow$ Solution $\rightarrow$ Methodology $\rightarrow$ Results $\rightarrow$ Roadmap. | **MATCH (100%)** | Standard academic presentation structure. |
+| **Slide 3: Introduction** | 7 routine physicochemical checks, rural chilling gap, 100% recall target. | **MATCH (100%)** | Core public health objective. |
+| **Slide 4: Lit Review** | HPLC/GC-MS/FTIR (10–50 Lakhs, days delay) vs. cheap manual lactometers (subjective, spoofable). | **MATCH (100%)** | Directly aligns with Chapter 2 of final report & IEEE paper. |
+| **Slide 5: Proposed Solution**| 7 features, leak-free pipeline, IQR Winsorization, schema validator rejecting impossible pH ($0\text{--}14$). | **MATCH (100%)** | Implemented in `src/foodadult/predict.py` and `pipeline.py`. |
+| **Slide 6: Methodology** | 1,059 records, 80/20 stratified split (847/212), 5 tuned models, unit tests. | **MATCH (99%)** | **Update:** Note mentions "45 tests"; the test suite currently has **47 automated tests** (all 47 passing in pytest). |
+| **Slide 7: Dataset** | 3 continuous, 4 binary checks, 75.83% adulterated vs. 24.17% pure, no SMOTE needed. | **MATCH (100%)** | Exact raw numbers: 803 adulterated (75.83%), 256 pure (24.17%). |
+| **Slide 8: Performance** | SVM RBF winning model: 99.53% accuracy, 0.9969 F1, 1.00 ROC-AUC, 100% recall (0 FN), pH #1 feature. | **MATCH (100%)** | Exactly matches `reports/RESULTS.md` and `reports/metrics/final_test_metrics.json`. |
+| **Slide 9: Conclusion** | 99.53% accuracy, 0 missed adulterations, future scope: ESP32/Raspberry Pi edge deployment. | **MATCH (100%)** | Perfect takeaway and forward roadmap. |
+| **Slide 10: References** | Subham Agarwal Kaggle dataset, Scikit-Learn pipelines, FSSAI / Codex standards. | **MATCH (100%)** | Exactly cites data provenance and regulatory foundations. |
+| **Slide 11: Paper & Close** | Research manuscript formatted for IEEE/Springer track submission. | **MATCH (100%)** | Complete LaTeX and Markdown paper stored in `docs/`. |
+
+---
+
 *This document is continuously updated with every new question asked during project sessions.*
+
 
 
 
